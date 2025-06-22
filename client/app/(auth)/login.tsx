@@ -70,7 +70,8 @@ const Login = () => {
             <View>
               <TextInput
                 style={style.input}
-                placeholder="Enter Your Email"
+                placeholder="Email"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 onChangeText={handleChange("email")}
@@ -88,6 +89,7 @@ const Login = () => {
               <TextInput
                 style={style.input}
                 placeholder="Password"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
                 secureTextEntry
                 onChangeText={handleChange("password")}
                 onBlur={handleBlur("password")}

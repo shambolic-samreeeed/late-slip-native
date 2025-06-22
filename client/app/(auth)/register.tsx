@@ -17,11 +17,11 @@ const register = () => {
       </View>
 
       <View>
-        <TextInput style={styles.input} placeholder="Enter Your Email" />
+        <TextInput style={styles.input} placeholder="Email" placeholderTextColor="rgba(0, 0, 0, 0.5)" />
       </View>
 
       <View>
-        <TextInput style={styles.input} />
+        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="rgba(0, 0, 0, 0.5)" />
       </View>
 
       <TouchableOpacity style={styles.button}>
