@@ -13,6 +13,7 @@ import { Formik } from "formik";
 import authServices from "@/services/authServices";
 import { Link, router } from "expo-router";
 import { loginValidationSchema } from "@/utils/validationSchemas";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import Ionicons from 'react-native-vector-icons/Iocdnicons';
 
 export const options = {
@@ -29,7 +30,12 @@ const Login = () => {
 
       if (response.success) {
         Alert.alert("Success", response.message || "Login successful");
-        // TODO: Save token using AsyncStorage if needed
+        if (response.token) {
+          await AsyncStorage.setItem("token", response.token);
+        } else {
+          console.warn("no token found");
+        }
+
         router.replace("/(tabs)");
       } else {
         Alert.alert("Login Failed", response.message || "Invalid credentials");
