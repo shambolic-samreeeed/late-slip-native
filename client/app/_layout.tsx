@@ -12,7 +12,7 @@ export default function RootLayout() {
       if(token){
         router.replace('/(tabs)/profile')
       }else{
-        router.replace('/(auth)/login')
+        router.replace('/(auth)/register')
       }
     }
 

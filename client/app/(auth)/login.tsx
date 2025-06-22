@@ -43,9 +43,14 @@ const Login = () => {
 
   return (
     <View style={style.container}>
-      <Text style={style.logoText}> Herald Sync</Text>
-      <Text style={style.title}>Welcome Back</Text>
-      
+      <View style={style.logoContainer}>
+        {/* <Image
+          source={require("@/assets/images/herald-white-logo.svg")}
+          style={style.logo}
+        /> */}
+        <Text style={style.logoText}> Herald Sync</Text>
+        <Text style={style.welcomeText}>Welcome back !</Text>
+      </View>
 
       <Formik
         initialValues={{ email: "", password: "" }}
@@ -109,9 +114,15 @@ const Login = () => {
             </TouchableOpacity>
 
             <View>
-              <Text>
+              <Text style={style.toRegister}>
                 Dont have an account?{" "}
-                <Link href="/(auth)/register"> Sign Up!</Link>
+                <Link
+                  href="/(auth)/register"
+                  style={{ fontWeight: "bold", color: "" }}
+                >
+                  {" "}
+                  Sign Up!
+                </Link>
               </Text>
             </View>
           </>
@@ -128,11 +139,28 @@ const style = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
   },
-  title: {
-    fontSize: 14,
+  logoContainer: {
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 30,
-    textAlign: "center",
-    color: "#333",
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    resizeMode: "contain",
+    marginRight: 12,
+  },
+  logoText: {
+    fontSize: 35,
+    fontWeight: "bold",
+    color: "#74C044",
+    margin: 20,
+  },
+  welcomeText: {
+    fontSize: 14,
+    textAlign: "left",
+    color: "#3C3C3C",
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
@@ -160,15 +188,9 @@ const style = StyleSheet.create({
     marginLeft: 4,
     fontSize: 13,
   },
-  logoText: {
-    fontSize:40,
-    resizeMode:'contain',
-    alignSelf:'center',
-    marginBottom:20,
-    fontWeight:'bold',
-    color:'#74C044',
-    backgroundColor:'red',
-
+  toRegister: {
+    textAlign: "center",
+    margin: 20,
   },
 });
 
