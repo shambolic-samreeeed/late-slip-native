@@ -10,8 +10,9 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Welcome!</Text>
-      <Link href="/(auth)/login">Login </Link>
+      <Text>Welcome !</Text>
+      <Link href='/(auth)/login'>Login</Link>
+
     </View>
   );
 }

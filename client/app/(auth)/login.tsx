@@ -6,77 +6,117 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Image,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
+import { Formik } from "formik";
 import authServices from "@/services/authServices";
-import { router } from "expo-router"; // ✅ you forgot this
+import { Link, router } from "expo-router";
+import { loginValidationSchema } from "@/utils/validationSchemas";
+// import Ionicons from 'react-native-vector-icons/Iocdnicons';
 
 export const options = {
   headerShown: false,
 };
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Missing fields", "Please fill up all the forms");
-      return;
-    }
-
-    setLoading(true);
-
+  const handleLogin = async (
+    values: { email: string; password: string },
+    { setSubmitting }: any
+  ) => {
     try {
-      const response = await authServices.login(email, password);
+      const response = await authServices.login(values.email, values.password);
 
       if (response.success) {
         Alert.alert("Success", response.message || "Login successful");
         // TODO: Save token using AsyncStorage if needed
-        router.replace("/(tabs)"); // 👈 Go to main app
+        router.replace("/(tabs)");
       } else {
         Alert.alert("Login Failed", response.message || "Invalid credentials");
       }
     } catch (error: any) {
       Alert.alert("Error", error.message || "Login failed");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
   return (
     <View style={style.container}>
+      <Text style={style.logoText}> Herald Sync</Text>
       <Text style={style.title}>Welcome Back</Text>
+      
 
-      <TextInput
-        style={style.input}
-        value={email}
-        onChangeText={setEmail} // ✅ You missed this
-        placeholder="Enter Your Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-
-      <TextInput
-        style={style.input}
-        value={password}
-        onChangeText={setPassword} // ✅ You missed this
-        placeholder="Password"
-        secureTextEntry
-      />
-
-      <TouchableOpacity
-        style={[style.button, loading && { backgroundColor: "#ccc" }]}
-        onPress={handleLogin} // ✅ You missed this
-        disabled={loading}
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={loginValidationSchema}
+        onSubmit={handleLogin}
       >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={style.buttonText}>Login</Text>
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+          isSubmitting,
+        }) => (
+          <>
+            <View>
+              <TextInput
+                style={style.input}
+                placeholder="Enter Your Email"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+              />
+            </View>
+            {touched.email && errors.email && (
+              <Text style={style.error}>{errors.email}</Text>
+            )}
+
+            <View>
+              {/* <Ionicons name="mail-outline" size={20} color="#333" /> */}
+
+              <TextInput
+                style={style.input}
+                placeholder="Password"
+                secureTextEntry
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+              />
+            </View>
+            {touched.password && errors.password && (
+              <Text style={style.error}>{errors.password}</Text>
+            )}
+
+            <TouchableOpacity
+              style={[
+                style.button,
+                isSubmitting && { backgroundColor: "#ccc" },
+              ]}
+              onPress={() => handleSubmit()}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={style.buttonText}>Login</Text>
+              )}
+            </TouchableOpacity>
+
+            <View>
+              <Text>
+                Dont have an account?{" "}
+                <Link href="/(auth)/register"> Sign Up!</Link>
+              </Text>
+            </View>
+          </>
         )}
-      </TouchableOpacity>
+      </Formik>
     </View>
   );
 };
@@ -89,8 +129,7 @@ const style = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
+    fontSize: 14,
     marginBottom: 30,
     textAlign: "center",
     color: "#333",
@@ -100,19 +139,36 @@ const style = StyleSheet.create({
     borderColor: "#ddd",
     padding: 14,
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: 10,
     fontSize: 16,
   },
   button: {
-    backgroundColor: "#0066cc",
+    backgroundColor: "#74C044",
     paddingVertical: 14,
     borderRadius: 8,
+    marginTop: 10,
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  error: {
+    color: "red",
+    marginBottom: 10,
+    marginLeft: 4,
+    fontSize: 13,
+  },
+  logoText: {
+    fontSize:40,
+    resizeMode:'contain',
+    alignSelf:'center',
+    marginBottom:20,
+    fontWeight:'bold',
+    color:'#74C044',
+    backgroundColor:'red',
+
   },
 });
 
