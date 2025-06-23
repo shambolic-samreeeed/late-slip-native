@@ -41,7 +41,7 @@ const Login = () => {
           console.warn("no token found");
         }
 
-        router.replace("/(tabs)");
+        router.replace("/(admin-tabs)/lateslipRequests");
       } else {
         Toast.show({
           type: "error",
