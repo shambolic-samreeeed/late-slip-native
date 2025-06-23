@@ -9,9 +9,7 @@ const login = async (email: string, password: string) => {
     });
     return response.data;
   } catch (error: any) {
-    throw new Error(
-      error.response?.data?.message || "Login failed. Please try again."
-    );
+    throw error;
   }
 };
 
@@ -24,9 +22,7 @@ const register = async (fullname: string, email: string, password: string) => {
     });
     return response.data;
   } catch (error: any) {
-    throw new Error(
-      error.response?.data?.message || "Registration failed. Please try again."
-    );
+    throw error;
   }
 };
 

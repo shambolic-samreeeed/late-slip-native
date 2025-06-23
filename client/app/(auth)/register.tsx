@@ -1,4 +1,5 @@
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -6,10 +7,51 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { Link } from "expo-router";
-import {Ionicons, Fontisto } from "@expo/vector-icons";
+import { Link, router } from "expo-router";
+import { Ionicons, Fontisto } from "@expo/vector-icons";
+import { Formik } from "formik";
+import authServices from "@/services/authServices";
+import { registerValidationSchema } from "@/utils/validationSchemas";
 
 const Register = () => {
+  const handleRegister = async (
+    values: { name: string; email: string; password: string },
+    { setSubmitting }: any
+  ) => {
+    try {
+      const response = await authServices.register(
+        values.name,
+        values.email,
+        values.password
+      );
+
+      if (response.success) {
+        Alert.alert("Success", response.message || "Registration Successful");
+        router.replace("/(tabs)");
+      } else {
+        Alert.alert(
+          "Registration Failed",
+          response.message || "User invalid. Please check your ID"
+        );
+      }
+    } catch (error: any) {
+      const status = error?.response?.status;
+      const message = error?.response?.data?.error;
+
+      if (
+        status === 409 ||
+        (message && message.toLowerCase().includes("already exists"))
+      ) {
+        Alert.alert("User already exists", "Please login instead.");
+        router.replace("/(auth)/login");
+      } else {
+        Alert.alert("Error", message || error.message || "Registration failed");
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
@@ -17,53 +59,101 @@ const Register = () => {
         <Text style={styles.signupText}>Signup using your college email.</Text>
       </View>
 
-      {/* input container for name */}
-      <View style={styles.inputWrapper}>
-        <Ionicons
-          name="person-outline"
-          size={18}
-          color="rgba(0, 0, 0, 0.5)"
-          style={styles.icon}
-        />
-        <TextInput
-          style={styles.inputWithIcon}
-          placeholder="Name"
-          placeholderTextColor="rgba(0, 0, 0, 0.5)"
-        />
-      </View>
+      <Formik
+        initialValues={{ name: "", email: "", password: "" }}
+        validationSchema={registerValidationSchema}
+        onSubmit={handleRegister}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+          isSubmitting,
+        }) => (
+          <>
+            {/* Name input */}
+            <View style={styles.inputWrapper}>
+              <Ionicons
+                name="person-outline"
+                size={18}
+                color="rgba(0, 0, 0, 0.5)"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputWithIcon}
+                placeholder="Name"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
+                onChangeText={handleChange("name")}
+                onBlur={handleBlur("name")}
+                value={values.name}
+                autoCapitalize="words"
+              />
+            </View>
+            {touched.name && errors.name && (
+              <Text style={styles.error}>{errors.name}</Text>
+            )}
 
-      <View style={styles.inputWrapper}>
-        <Fontisto
-          name="email"
-          size={18}
-          color="rgba(0, 0, 0, 0.5)"
-          style={styles.icon}
-        />
-        <TextInput
-          style={styles.inputWithIcon}
-          placeholder="Email"
-          placeholderTextColor="rgba(0, 0, 0, 0.5)"
-        />
-      </View>
+            {/* Email input */}
+            <View style={styles.inputWrapper}>
+              <Fontisto
+                name="email"
+                size={18}
+                color="rgba(0, 0, 0, 0.5)"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputWithIcon}
+                placeholder="Email"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
+            {touched.email && errors.email && (
+              <Text style={styles.error}>{errors.email}</Text>
+            )}
 
-      <View style={styles.inputWrapper}>
-        <Ionicons
-          name="lock-closed-outline"
-          size={18}
-          color="rgba(0, 0, 0, 0.5)"
-          style={styles.icon}
-        />
-        <TextInput
-          style={styles.inputWithIcon}
-          placeholder="Password"
-          placeholderTextColor="rgba(0, 0, 0, 0.5)"
-          secureTextEntry
-        />
-      </View>
+            {/* Password input */}
+            <View style={styles.inputWrapper}>
+              <Ionicons
+                name="lock-closed-outline"
+                size={18}
+                color="rgba(0, 0, 0, 0.5)"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.inputWithIcon}
+                placeholder="Password"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
+                secureTextEntry
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+              />
+            </View>
+            {touched.password && errors.password && (
+              <Text style={styles.error}>{errors.password}</Text>
+            )}
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Sign up</Text>
-      </TouchableOpacity>
+            {/* Submit button */}
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleSubmit()}
+              disabled={isSubmitting}
+            >
+              <Text style={styles.buttonText}>
+                {isSubmitting ? "Signing up..." : "Sign up"}
+              </Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </Formik>
 
       <View>
         <Text style={styles.toSignIn}>
@@ -79,6 +169,7 @@ const Register = () => {
 
 export default Register;
 
+// Styles remain unchanged
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -90,12 +181,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 30,
-  },
-  logo: {
-    width: 60,
-    height: 60,
-    resizeMode: "contain",
-    marginRight: 12,
   },
   logoText: {
     fontSize: 35,
@@ -109,7 +194,6 @@ const styles = StyleSheet.create({
     color: "#3C3C3C",
     fontWeight: "bold",
   },
-
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -127,7 +211,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     fontSize: 16,
   },
-
   button: {
     backgroundColor: "#74C044",
     paddingVertical: 14,
@@ -140,7 +223,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-
   error: {
     color: "red",
     marginBottom: 10,
