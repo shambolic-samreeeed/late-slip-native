@@ -1,5 +1,4 @@
 import {
-  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -12,6 +11,7 @@ import { Ionicons, Fontisto } from "@expo/vector-icons";
 import { Formik } from "formik";
 import authServices from "@/services/authServices";
 import { registerValidationSchema } from "@/utils/validationSchemas";
+import Toast from "react-native-toast-message";
 
 const Register = () => {
   const handleRegister = async (
@@ -26,13 +26,18 @@ const Register = () => {
       );
 
       if (response.success) {
-        Alert.alert("Success", response.message || "Registration Successful");
+        Toast.show({
+          type: "success",
+          text1: "Registration Successful",
+          text2: response.message || "Welcome to Herald Sync!",
+        });
         router.replace("/(tabs)");
       } else {
-        Alert.alert(
-          "Registration Failed",
-          response.message || "User invalid. Please check your ID"
-        );
+        Toast.show({
+          type: "error",
+          text1: "Registration Failed",
+          text2: response.message || "User invalid. Please check your ID",
+        });
       }
     } catch (error: any) {
       const status = error?.response?.status;
@@ -42,10 +47,18 @@ const Register = () => {
         status === 409 ||
         (message && message.toLowerCase().includes("already exists"))
       ) {
-        Alert.alert("User already exists", "Please login instead.");
+        Toast.show({
+          type: "error",
+          text1: "User already exists",
+          text2: "Please login instead.",
+        });
         router.replace("/(auth)/login");
       } else {
-        Alert.alert("Error", message || error.message || "Registration failed");
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: message || error.message || "Registration failed",
+        });
       }
     } finally {
       setSubmitting(false);
@@ -74,7 +87,7 @@ const Register = () => {
           isSubmitting,
         }) => (
           <>
-            {/* Name input */}
+            {/* Name */}
             <View style={styles.inputWrapper}>
               <Ionicons
                 name="person-outline"
@@ -96,7 +109,7 @@ const Register = () => {
               <Text style={styles.error}>{errors.name}</Text>
             )}
 
-            {/* Email input */}
+            {/* Email */}
             <View style={styles.inputWrapper}>
               <Fontisto
                 name="email"
@@ -119,7 +132,7 @@ const Register = () => {
               <Text style={styles.error}>{errors.email}</Text>
             )}
 
-            {/* Password input */}
+            {/* Password */}
             <View style={styles.inputWrapper}>
               <Ionicons
                 name="lock-closed-outline"
@@ -141,7 +154,7 @@ const Register = () => {
               <Text style={styles.error}>{errors.password}</Text>
             )}
 
-            {/* Submit button */}
+            {/* Submit Button */}
             <TouchableOpacity
               style={styles.button}
               onPress={() => handleSubmit()}
@@ -160,7 +173,7 @@ const Register = () => {
           Already registered?{" "}
           <Link href="/(auth)/login" style={{ fontWeight: "bold" }}>
             Login Here!
-          </Link>{" "}
+          </Link>
         </Text>
       </View>
     </View>
@@ -169,7 +182,6 @@ const Register = () => {
 
 export default Register;
 
-// Styles remain unchanged
 const styles = StyleSheet.create({
   container: {
     flex: 1,

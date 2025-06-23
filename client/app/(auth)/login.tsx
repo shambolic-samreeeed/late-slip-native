@@ -15,6 +15,7 @@ import { Link, router } from "expo-router";
 import { loginValidationSchema } from "@/utils/validationSchemas";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Entypo, Ionicons, Fontisto } from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
 
 export const options = {
   headerShown: false,
@@ -29,7 +30,11 @@ const Login = () => {
       const response = await authServices.login(values.email, values.password);
 
       if (response.success) {
-        Alert.alert("Success", response.message || "Login successful");
+        Toast.show({
+          type: "success",
+          text1: "success",
+          text2: response.message || "login successful",
+        });
         if (response.token) {
           await AsyncStorage.setItem("token", response.token);
         } else {
@@ -38,10 +43,18 @@ const Login = () => {
 
         router.replace("/(tabs)");
       } else {
-        Alert.alert("Login Failed", response.message || "Invalid credentials");
+        Toast.show({
+          type: "error",
+          text1: "Login Failed",
+          text2: response.message || "Invalid Credentials",
+        });
       }
     } catch (error: any) {
-      Alert.alert("Error", error.message || "Login failed");
+      Toast.show({
+        type: "error",
+        text1: "Invalid Credentials",
+        text2: error.message || "Login failed",
+      });
     } finally {
       setSubmitting(false);
     }
