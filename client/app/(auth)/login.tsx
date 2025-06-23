@@ -14,7 +14,7 @@ import authServices from "@/services/authServices";
 import { Link, router } from "expo-router";
 import { loginValidationSchema } from "@/utils/validationSchemas";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import Ionicons from 'react-native-vector-icons/Iocdnicons';
+import { Entypo, Ionicons, Fontisto } from "@expo/vector-icons";
 
 export const options = {
   headerShown: false,
@@ -50,10 +50,6 @@ const Login = () => {
   return (
     <View style={style.container}>
       <View style={style.logoContainer}>
-        {/* <Image
-          source={require("@/assets/images/herald-white-logo.svg")}
-          style={style.logo}
-        /> */}
         <Text style={style.logoText}> Herald Sync</Text>
         <Text style={style.welcomeText}>Welcome back !</Text>
       </View>
@@ -73,9 +69,16 @@ const Login = () => {
           isSubmitting,
         }) => (
           <>
-            <View>
+            {/* Email input field */}
+            <View style={style.inputWrapper}>
+              <Fontisto
+                name="email"
+                size={18}
+                color="rgba(0, 0, 0, 0.5)"
+                style={style.icon}
+              />
               <TextInput
-                style={style.input}
+                style={style.inputWithIcon}
                 placeholder="Email"
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
                 keyboardType="email-address"
@@ -85,15 +88,21 @@ const Login = () => {
                 value={values.email}
               />
             </View>
+
             {touched.email && errors.email && (
               <Text style={style.error}>{errors.email}</Text>
             )}
 
-            <View>
-              {/* <Ionicons name="mail-outline" size={20} color="#333" /> */}
-
+            {/* input field for password */}
+            <View style={style.inputWrapper}>
+              <Ionicons
+                name="lock-closed-outline"
+                size={18}
+                color="rgba(0, 0, 0, 0.5)"
+                style={style.icon}
+              />
               <TextInput
-                style={style.input}
+                style={style.inputWithIcon}
                 placeholder="Password"
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
                 secureTextEntry
@@ -199,6 +208,24 @@ const style = StyleSheet.create({
   toRegister: {
     textAlign: "center",
     margin: 20,
+  },
+  // styles for container
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  inputWithIcon: {
+    flex: 1,
+    paddingVertical: 14,
+    fontSize: 16,
   },
 });
 

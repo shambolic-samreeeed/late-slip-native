@@ -7,8 +7,9 @@ import {
 } from "react-native";
 import React from "react";
 import { Link } from "expo-router";
+import {Ionicons, Fontisto } from "@expo/vector-icons";
 
-const register = () => {
+const Register = () => {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
@@ -16,17 +17,54 @@ const register = () => {
         <Text style={styles.signupText}>Signup using your college email.</Text>
       </View>
 
-      <View>
-        <TextInput style={styles.input} placeholder="Email" placeholderTextColor="rgba(0, 0, 0, 0.5)" />
+      {/* input container for name */}
+      <View style={styles.inputWrapper}>
+        <Ionicons
+          name="person-outline"
+          size={18}
+          color="rgba(0, 0, 0, 0.5)"
+          style={styles.icon}
+        />
+        <TextInput
+          style={styles.inputWithIcon}
+          placeholder="Name"
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+        />
       </View>
 
-      <View>
-        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="rgba(0, 0, 0, 0.5)" />
+      <View style={styles.inputWrapper}>
+        <Fontisto
+          name="email"
+          size={18}
+          color="rgba(0, 0, 0, 0.5)"
+          style={styles.icon}
+        />
+        <TextInput
+          style={styles.inputWithIcon}
+          placeholder="Email"
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+        />
+      </View>
+
+      <View style={styles.inputWrapper}>
+        <Ionicons
+          name="lock-closed-outline"
+          size={18}
+          color="rgba(0, 0, 0, 0.5)"
+          style={styles.icon}
+        />
+        <TextInput
+          style={styles.inputWithIcon}
+          placeholder="Password"
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+          secureTextEntry
+        />
       </View>
 
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Sign up</Text>
       </TouchableOpacity>
+
       <View>
         <Text style={styles.toSignIn}>
           Already registered?{" "}
@@ -39,7 +77,7 @@ const register = () => {
   );
 };
 
-export default register;
+export default Register;
 
 const styles = StyleSheet.create({
   container: {
@@ -71,14 +109,25 @@ const styles = StyleSheet.create({
     color: "#3C3C3C",
     fontWeight: "bold",
   },
-  input: {
+
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: "#ddd",
-    padding: 14,
     borderRadius: 8,
+    paddingHorizontal: 10,
     marginBottom: 10,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  inputWithIcon: {
+    flex: 1,
+    paddingVertical: 14,
     fontSize: 16,
   },
+
   button: {
     backgroundColor: "#74C044",
     paddingVertical: 14,
@@ -91,6 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+
   error: {
     color: "red",
     marginBottom: 10,
@@ -102,52 +152,3 @@ const styles = StyleSheet.create({
     margin: 20,
   },
 });
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     justifyContent: "center",
-//     paddingHorizontal: 20,
-//   },
-//   logoText: {
-//     fontSize: 35,
-//     fontWeight: "bold",
-//     color: "#74C044",
-//     margin: 20,
-//   },
-//   signupText: {
-//     fontSize: 14,
-//     textAlign: "left",
-//     color: "#3C3C3C",
-//     fontWeight: "bold",
-//   },
-//   logoContainer: {
-//     alignItems: "center",
-//     justifyContent: "center",
-//     marginBottom: 30,
-//   },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: "#ddd",
-//     padding: 14,
-//     borderRadius: 8,
-//     marginBottom: 10,
-//     fontSize: 16,
-//   },
-//   button: {
-//     backgroundColor: "#74C044",
-//     paddingVertical: 14,
-//     borderRadius: 8,
-//     marginTop: 10,
-//   },
-//   buttonText: {
-//     color: "#fff",
-//     textAlign: "center",
-//     fontSize: 16,
-//     fontWeight: "bold",
-//   },
-//   toSignIn: {
-//     textAlign: "center",
-//   },
-// });

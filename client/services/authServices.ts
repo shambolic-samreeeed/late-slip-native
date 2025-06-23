@@ -1,17 +1,33 @@
-import axios from 'axios';
-import { BASE_URL } from '@/config/api';
+import axios from "axios";
+import { BASE_URL } from "@/config/api";
 
-const login = async (email: string, password: string) =>{
-    try{
-        const response = await axios.post (`${BASE_URL}/student/login`, {
-            email, password
-        });
-        return response.data
-    }catch(error:any){
-        throw new Error(
-            error.response?.data?.message || 'Login failed. Please try again.'
-        )
-    }
+const login = async (email: string, password: string) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/student/login`, {
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Login failed. Please try again."
+    );
+  }
 };
 
-export default {login}
+const register = async (fullname: string, email: string, password: string) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/student/register`, {
+      fullname,
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Registration failed. Please try again."
+    );
+  }
+};
+
+export default { login, register };
