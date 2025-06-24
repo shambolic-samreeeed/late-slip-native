@@ -2,7 +2,6 @@ import {
   View,
   Text,
   TextInput,
-  Alert,
   StyleSheet,
   Image,
   TouchableOpacity,
@@ -11,8 +10,38 @@ import React from "react";
 import { Formik } from "formik";
 import { requestLateSlip } from "@/services/lateSlipServices";
 import { RequestSchema } from "@/utils/lateSlipRequestSchema";
+import Toast from "react-native-toast-message";
 
 const Lateslip = () => {
+  const handleSubmit = async (
+    values: { reason: string },
+    { resetForm }: { resetForm: () => void }
+  ) => {
+    try {
+      const data = await requestLateSlip(values.reason);
+      if (data?.success) {
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: data.message || "Late slip requested successfully",
+        });
+        resetForm();
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: data.message || "Late slip request failed",
+        });
+      }
+    } catch (err: any) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: err?.message || "Something went wrong",
+      });
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {/* Header */}
@@ -33,19 +62,7 @@ const Lateslip = () => {
         <Formik
           initialValues={{ reason: "" }}
           validationSchema={RequestSchema}
-          onSubmit={async (values, { resetForm }) => {
-            try {
-              const data = await requestLateSlip(values.reason);
-              if (data?.success) {
-                Alert.alert("Success", data.message || "Late slip requested.");
-                resetForm();
-              } else {
-                Alert.alert("Error", data.message || "Request failed.");
-              }
-            } catch (err: any) {
-              Alert.alert("Error", err?.message || "Something went wrong.");
-            }
-          }}
+          onSubmit={handleSubmit}
         >
           {({
             handleChange,
