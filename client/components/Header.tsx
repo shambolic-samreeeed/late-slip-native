@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#74C044",
+    color: "#75BF43",
   },
   container: {
     flex: 1,

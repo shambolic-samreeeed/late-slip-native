@@ -1,14 +1,26 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { replace } from "expo-router/build/global-state/routing";
 
 const profile = () => {
-  return (
+  const handleLogout = async () => {
+    try {
+      AsyncStorage.removeItem("token");
+      replace("/(auth)/login");
+    } catch (error: any) {
+      Alert.alert("Error", "Failed to logout. Please try again.");
+    }
+  };
+  return (  
     <View>
-      <Text>profile</Text>
+      <TouchableOpacity onPress={handleLogout}>
+        <Text>Logout</Text>
+      </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 
-export default profile
+export default profile;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
