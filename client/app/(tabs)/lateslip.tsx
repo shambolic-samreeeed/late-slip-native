@@ -11,6 +11,7 @@ import { Formik } from "formik";
 import { requestLateSlip } from "@/services/lateSlipServices";
 import { RequestSchema } from "@/utils/lateSlipRequestSchema";
 import Toast from "react-native-toast-message";
+import Header from "../../components/Header";
 
 const Lateslip = () => {
   const handleSubmit = async (
@@ -45,15 +46,7 @@ const Lateslip = () => {
   return (
     <View style={{ flex: 1 }}>
       {/* Header */}
-      <View style={styles.headerContainer}>
-        <View style={styles.logoWrapper}>
-          <Image
-            source={require("../../assets/images/footer-logo.png")}
-            style={styles.image}
-          />
-        </View>
-        <Text style={styles.logoText}>Herald Sync</Text>
-      </View>
+      <Header />
 
       {/* Form Content */}
       <View style={styles.container}>
