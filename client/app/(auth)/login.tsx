@@ -30,11 +30,6 @@ const Login = () => {
       const response = await authServices.login(values.email, values.password);
 
       if (response.success) {
-        Toast.show({
-          type: "success",
-          text1: "success",
-          text2: response.message || "login successful",
-        });
         if (response.token) {
           await AsyncStorage.setItem("token", response.token);
         } else {

@@ -1,6 +1,7 @@
 import { Link, router } from "expo-router";
 import { Text, View, TouchableOpacity, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "@/components/Header";
 
 export default function Index() {
   const handleLogout = async () => {
@@ -21,6 +22,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
+      <Header />
       <Text>Welcome!</Text>
       <Link href="/(auth)/login">Login</Link>
 
