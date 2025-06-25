@@ -2,5 +2,4 @@
 // export const BASE_URL = `http://${IP}:8080`;
 
 // Local tunnel URL
-export const BASE_URL =
-  "https://vi-meeting-programmers-coordinates.trycloudflare.com";
+export const BASE_URL = "https://attractive-eva-deemed-drink.trycloudflare.com";

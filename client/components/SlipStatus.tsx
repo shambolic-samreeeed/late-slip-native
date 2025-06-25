@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { fetchAllLateSlips } from "@/services/lateSlipServices";
 
-// 1. Define a TypeScript interface
+// 🟢 TypeScript interface for a late slip
 interface LateSlip {
   id: string;
   student_id: string;
@@ -20,7 +20,6 @@ interface LateSlip {
 }
 
 const SlipStatus = () => {
-  // 2. Use the type
   const [lateSlips, setLateSlips] = useState<LateSlip[]>([]);
   const [loading, setLoading] = useState(true);
 

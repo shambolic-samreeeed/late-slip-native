@@ -39,7 +39,7 @@ export const fetchAllLateSlips = async () => {
       },
     });
 
-    return response.data;
+    return response.data.lateSlips; 
   } catch (error: any) {
     console.error("Fetching Late Slips failed", error);
     throw error.response?.data || { message: "Failed to fetch late slips" };
