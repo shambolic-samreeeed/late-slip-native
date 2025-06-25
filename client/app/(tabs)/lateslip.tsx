@@ -12,6 +12,7 @@ import { requestLateSlip } from "@/services/lateSlipServices";
 import { RequestSchema } from "@/utils/lateSlipRequestSchema";
 import Toast from "react-native-toast-message";
 import Header from "../../components/Header";
+import SlipStatus from "@/components/SlipStatus";
 
 const Lateslip = () => {
   const handleSubmit = async (
@@ -88,7 +89,10 @@ const Lateslip = () => {
             </>
           )}
         </Formik>
+
+        <SlipStatus/>
       </View>
+      
     </View>
   );
 };
