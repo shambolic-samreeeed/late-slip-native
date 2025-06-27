@@ -1,8 +1,16 @@
-import { View, Text, Button, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import Header from "@/components/Header";
+import Button from "@/components/Button";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -45,17 +53,23 @@ const Profile = () => {
   return (
     <View style={{ flex: 1 }}>
       <Header />
-
+      <View style={styles.profileLogoContainer}>
+        <Image
+          style={styles.profileImage}
+          source={require("../../assets/images/6858504.png")}
+        />
+        <Text style={styles.nameText}> {name || "no name"}</Text>
+        {/* <Text style={styles.emailText}>Email: {email || "no email"}</Text> */}
+      </View>
       <View style={styles.container}>
-        <Text style={{ fontSize: 24, marginBottom: 10 }}>Profile</Text>
-        <Text style={{ fontSize: 18 }}>Welcome, {name || "no name"}</Text>
-        <Text style={{ fontSize: 16, marginTop: 4, color: "gray" }}>
-          Email: {email || "no email"}
-        </Text>
+        <Text style={styles.title}>Profile</Text>
 
-        <View style={{ marginTop: 20 }}>
-          <Button title="Log Out" onPress={handleLogout} />
-        </View>
+        <Button
+          title="Logout"
+          onPress={handleLogout}
+          style={{ backgroundColor: "red" }}
+          // textStyle={{ fontSize: 20 }}
+        />
       </View>
     </View>
   );
@@ -69,5 +83,37 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 20,
     paddingTop: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 10,
+    fontWeight: "bold",
+  },
+  nameText: {
+    fontSize: 18,
+    fontWeight:'bold'
+  },
+  emailText: {
+    fontSize: 16,
+    marginTop: 4,
+    color: "gray",
+  },
+  button: {
+    marginTop: 30,
+    backgroundColor: "#74C044",
+    borderRadius: 6,
+    overflow: "hidden",
+    padding: 20,
+  },
+  profileLogoContainer: {
+    // backgroundColor: "red",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical:20
+  },
+  profileImage: {
+    height: 120,
+    width: 120,
   },
 });

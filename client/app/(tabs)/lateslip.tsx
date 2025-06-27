@@ -13,6 +13,7 @@ import { requestLateSlip, getMyLateSlips } from "@/services/lateSlipServices";
 import { RequestSchema } from "@/utils/lateSlipRequestSchema";
 import Toast from "react-native-toast-message";
 import Header from "../../components/Header";
+import Button from "@/components/Button";
 
 const Lateslip = () => {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -115,12 +116,7 @@ const Lateslip = () => {
                 <Text style={styles.error}>{errors.reason}</Text>
               )}
 
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleSubmit()}
-              >
-                <Text style={styles.buttonText}>Submit Request</Text>
-              </TouchableOpacity>
+              <Button onPress={handleSubmit} title="Submit" />
             </>
           )}
         </Formik>
