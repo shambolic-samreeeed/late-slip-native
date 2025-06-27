@@ -3,7 +3,6 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  TouchableOpacity,
   FlatList,
   ActivityIndicator,
 } from "react-native";
@@ -20,6 +19,7 @@ const Lateslip = () => {
   const [slips, setSlips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch slips
   useEffect(() => {
     const fetchSlips = async () => {
       try {
@@ -40,6 +40,7 @@ const Lateslip = () => {
     fetchSlips();
   }, [refreshKey]);
 
+  // Form submission
   const handleSubmit = async (
     values: { reason: string },
     { resetForm }: { resetForm: () => void }
@@ -53,7 +54,7 @@ const Lateslip = () => {
           text2: data.message || "Late slip requested successfully",
         });
         resetForm();
-        setRefreshKey((prev) => prev + 1);
+        setRefreshKey((prev) => prev + 1); // trigger refresh
       } else {
         Toast.show({
           type: "error",
@@ -70,7 +71,7 @@ const Lateslip = () => {
     }
   };
 
-  //function to determine the color of the status
+  // Helper to determine status color
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "approved":
@@ -79,8 +80,20 @@ const Lateslip = () => {
         return "red";
       case "pending":
       default:
-        return "blck";
+        return "black";
     }
+  };
+
+  // Format date + time
+  const formatDateTime = (isoString: string) => {
+    const date = new Date(isoString);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
   };
 
   return (
@@ -125,7 +138,7 @@ const Lateslip = () => {
         {loading ? (
           <ActivityIndicator size="small" color="#74C044" />
         ) : slips.length === 0 ? (
-          <Text style={{ marginTop: 10 }}>No slips yet.</Text>
+          <Text style={{ marginTop: 10 }}>No Records For Late Slips.</Text>
         ) : (
           <FlatList
             data={slips}
@@ -142,7 +155,9 @@ const Lateslip = () => {
                   Status: {item.status}
                 </Text>
                 <Text style={styles.reason}>Reason: {item.reason}</Text>
-                <Text style={styles.reason}>Date: {item.date}</Text>
+                <Text style={styles.reason}>
+                  Date: {formatDateTime(item.created_at)}
+                </Text>
               </View>
             )}
           />
@@ -178,18 +193,6 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
     marginBottom: 10,
-  },
-  button: {
-    backgroundColor: "#74C044",
-    paddingVertical: 12,
-    borderRadius: 6,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
   },
   statusHeading: {
     fontSize: 18,

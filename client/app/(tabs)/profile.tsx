@@ -51,18 +51,18 @@ const Profile = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <Header />
       <View style={styles.profileLogoContainer}>
         <Image
           style={styles.profileImage}
           source={require("../../assets/images/6858504.png")}
         />
-        <Text style={styles.nameText}> {name || "no name"}</Text>
-        {/* <Text style={styles.emailText}>Email: {email || "no email"}</Text> */}
+        <Text style={styles.nameText}> {name || "..."}</Text>
+        <Text style={styles.emailText}> {email || "..."}</Text>
       </View>
       <View style={styles.container}>
-        <Text style={styles.title}>Profile</Text>
+        {/* <Text style={styles.title}>Profile</Text> */}
 
         <Button
           title="Logout"
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 18,
-    fontWeight:'bold'
+    fontWeight: "bold",
   },
   emailText: {
     fontSize: 16,
@@ -106,11 +106,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   profileLogoContainer: {
-    // backgroundColor: "red",
+    backgroundColor: "#fff",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginVertical:20
+    marginVertical: 20,
   },
   profileImage: {
     height: 120,
