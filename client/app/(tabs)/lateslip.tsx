@@ -19,7 +19,6 @@ const Lateslip = () => {
   const [slips, setSlips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch slips on mount and every time refreshKey changes
   useEffect(() => {
     const fetchSlips = async () => {
       try {
@@ -40,7 +39,6 @@ const Lateslip = () => {
     fetchSlips();
   }, [refreshKey]);
 
-  // Handle submit
   const handleSubmit = async (
     values: { reason: string },
     { resetForm }: { resetForm: () => void }
@@ -54,7 +52,7 @@ const Lateslip = () => {
           text2: data.message || "Late slip requested successfully",
         });
         resetForm();
-        setRefreshKey((prev) => prev + 1); // trigger refresh
+        setRefreshKey((prev) => prev + 1);
       } else {
         Toast.show({
           type: "error",
@@ -68,6 +66,19 @@ const Lateslip = () => {
         text1: "Error",
         text2: err?.message || "Something went wrong",
       });
+    }
+  };
+
+  //function to determine the color of the status
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "approved":
+        return "green";
+      case "rejected":
+        return "red";
+      case "pending":
+      default:
+        return "blck";
     }
   };
 
@@ -126,7 +137,14 @@ const Lateslip = () => {
             contentContainerStyle={{ paddingVertical: 10 }}
             renderItem={({ item }) => (
               <View style={styles.slipItem}>
-                <Text style={styles.status}>Status: {item.status}</Text>
+                <Text
+                  style={[
+                    styles.status,
+                    { color: getStatusColor(item.status) },
+                  ]}
+                >
+                  Status: {item.status}
+                </Text>
                 <Text style={styles.reason}>Reason: {item.reason}</Text>
                 <Text style={styles.reason}>Date: {item.date}</Text>
               </View>
