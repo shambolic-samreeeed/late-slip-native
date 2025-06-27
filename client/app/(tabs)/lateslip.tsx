@@ -3,18 +3,44 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  Image,
   TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
-import { requestLateSlip } from "@/services/lateSlipServices";
+import { requestLateSlip, getMyLateSlips } from "@/services/lateSlipServices";
 import { RequestSchema } from "@/utils/lateSlipRequestSchema";
 import Toast from "react-native-toast-message";
 import Header from "../../components/Header";
-import SlipStatus from "@/components/SlipStatus";
 
 const Lateslip = () => {
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [slips, setSlips] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch slips on mount and every time refreshKey changes
+  useEffect(() => {
+    const fetchSlips = async () => {
+      try {
+        setLoading(true);
+        const response = await getMyLateSlips();
+        if (response.success) {
+          setSlips(response.lateSlips || []);
+        } else {
+          console.warn("Failed to fetch slips");
+        }
+      } catch (error) {
+        console.error("Error fetching slips:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSlips();
+  }, [refreshKey]);
+
+  // Handle submit
   const handleSubmit = async (
     values: { reason: string },
     { resetForm }: { resetForm: () => void }
@@ -28,6 +54,7 @@ const Lateslip = () => {
           text2: data.message || "Late slip requested successfully",
         });
         resetForm();
+        setRefreshKey((prev) => prev + 1); // trigger refresh
       } else {
         Toast.show({
           type: "error",
@@ -46,10 +73,7 @@ const Lateslip = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Header */}
       <Header />
-
-      {/* Form Content */}
       <View style={styles.container}>
         <Text style={styles.heading}>Request a Lateslip</Text>
 
@@ -90,9 +114,26 @@ const Lateslip = () => {
           )}
         </Formik>
 
-        <SlipStatus/>
+        <Text style={styles.statusHeading}>Your Late Slips</Text>
+        {loading ? (
+          <ActivityIndicator size="small" color="#74C044" />
+        ) : slips.length === 0 ? (
+          <Text style={{ marginTop: 10 }}>No slips yet.</Text>
+        ) : (
+          <FlatList
+            data={slips}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ paddingVertical: 10 }}
+            renderItem={({ item }) => (
+              <View style={styles.slipItem}>
+                <Text style={styles.status}>Status: {item.status}</Text>
+                <Text style={styles.reason}>Reason: {item.reason}</Text>
+                <Text style={styles.reason}>Date: {item.date}</Text>
+              </View>
+            )}
+          />
+        )}
       </View>
-      
     </View>
   );
 };
@@ -100,29 +141,6 @@ const Lateslip = () => {
 export default Lateslip;
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    height: 60,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#3C3C3C",
-    paddingHorizontal: 20,
-  },
-  logoWrapper: {
-    height: 40,
-    width: 90,
-    alignItems: "flex-start",
-  },
-  image: {
-    height: "100%",
-    width: "100%",
-    resizeMode: "contain",
-  },
-  logoText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#74C044",
-  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -158,5 +176,24 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  statusHeading: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 30,
+    marginBottom: 10,
+  },
+  slipItem: {
+    backgroundColor: "#f2f2f2",
+    padding: 12,
+    borderRadius: 6,
+    marginBottom: 10,
+  },
+  status: {
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  reason: {
+    color: "#333",
   },
 });
