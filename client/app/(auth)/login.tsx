@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  Image,
 } from "react-native";
 import React from "react";
 import { Formik } from "formik";
@@ -14,7 +13,7 @@ import authServices from "@/services/authServices";
 import { Link, router } from "expo-router";
 import { loginValidationSchema } from "@/utils/validationSchemas";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Entypo, Ionicons, Fontisto } from "@expo/vector-icons";
+import { Fontisto, Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 
 export const options = {
@@ -29,12 +28,15 @@ const Login = () => {
     try {
       const response = await authServices.login(values.email, values.password);
 
-      if (response.success) {
-        if (response.token) {
-          await AsyncStorage.setItem("token", response.token);
-          
-        } else {
-          console.warn("no token found");
+      if (response.success && response.token) {
+        await AsyncStorage.setItem("token", response.token);
+
+        if (response.data?.fullname) {
+          await AsyncStorage.setItem("name", response.data.fullname);
+        }
+
+        if (response.data?.email) {
+          await AsyncStorage.setItem("email", response.data.email);
         }
 
         router.replace("/(tabs)/lateslip");
@@ -59,8 +61,8 @@ const Login = () => {
   return (
     <View style={style.container}>
       <View style={style.logoContainer}>
-        <Text style={style.logoText}> Herald Sync</Text>
-        <Text style={style.welcomeText}>Welcome back !</Text>
+        <Text style={style.logoText}>Herald Sync</Text>
+        <Text style={style.welcomeText}>Welcome back!</Text>
       </View>
 
       <Formik
@@ -97,12 +99,11 @@ const Login = () => {
                 value={values.email}
               />
             </View>
-
             {touched.email && errors.email && (
               <Text style={style.error}>{errors.email}</Text>
             )}
 
-            {/* input field for password */}
+            {/* Password input field */}
             <View style={style.inputWrapper}>
               <Ionicons
                 name="lock-closed-outline"
@@ -141,12 +142,11 @@ const Login = () => {
 
             <View>
               <Text style={style.toRegister}>
-                Dont have an account?{" "}
+                Don’t have an account?{" "}
                 <Link
                   href="/(auth)/register"
-                  style={{ fontWeight: "bold", color: "" }}
+                  style={{ fontWeight: "bold", color: "#74C044" }}
                 >
-                  {" "}
                   Sign Up!
                 </Link>
               </Text>
@@ -170,12 +170,6 @@ const style = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 30,
   },
-  logo: {
-    width: 60,
-    height: 60,
-    resizeMode: "contain",
-    marginRight: 12,
-  },
   logoText: {
     fontSize: 35,
     fontWeight: "bold",
@@ -188,12 +182,21 @@ const style = StyleSheet.create({
     color: "#3C3C3C",
     fontWeight: "bold",
   },
-  input: {
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: "#ddd",
-    padding: 14,
     borderRadius: 8,
+    paddingHorizontal: 10,
     marginBottom: 10,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  inputWithIcon: {
+    flex: 1,
+    paddingVertical: 14,
     fontSize: 16,
   },
   button: {
@@ -217,24 +220,6 @@ const style = StyleSheet.create({
   toRegister: {
     textAlign: "center",
     margin: 20,
-  },
-  // styles for container
-  inputWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  icon: {
-    marginRight: 8,
-  },
-  inputWithIcon: {
-    flex: 1,
-    paddingVertical: 14,
-    fontSize: 16,
   },
 });
 

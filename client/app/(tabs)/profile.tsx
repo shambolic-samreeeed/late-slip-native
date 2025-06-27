@@ -1,90 +1,50 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { View, Text, Button, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { replace } from "expo-router/build/global-state/routing";
+import { router } from "expo-router";
 
 const Profile = () => {
-  const [userInfo, setUserInfo] = useState<{
-    name?: string;
-    user_id?: string;
-  } | null>(null);
-
-  const decodeToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      if (!token) return;
-
-      const payloadBase64 = token.split(".")[1];
-      const base64 = payloadBase64.replace(/-/g, "+").replace(/_/g, "/");
-
-      // Decode JWT payload (base64)
-      const decodedPayload = JSON.parse(
-        Buffer.from(base64, "base64").toString("utf-8")
-      );
-
-      // You can log it to see all contents
-      console.log("Decoded JWT Payload:", decodedPayload);
-
-      // Save the user info to state
-      setUserInfo({
-        name: decodedPayload.name,
-        user_id: decodedPayload.user_id,
-      });
-    } catch (err) {
-      console.error("Failed to decode token", err);
-    }
-  };
+  const [name, setName] = useState("");
 
   useEffect(() => {
-    decodeToken();
+    const fetchName = async () => {
+      try {
+        const storedName = await AsyncStorage.getItem("name");
+        if (storedName) {
+          setName(storedName);
+          console.log("Fetched name in useEffect:", storedName);
+        } else {
+          console.log("No name found in AsyncStorage");
+        }
+      } catch (error) {
+        console.error("Error fetching name:", error);
+      }
+    };
+
+    fetchName();
   }, []);
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.removeItem("token");
-      replace("/(auth)/login");
-    } catch (error: any) {
-      Alert.alert("Error", "Failed to logout. Please try again.");
+      await AsyncStorage.multiRemove(["token", "name", "email"]);
+      Alert.alert("Logged Out", "You have been logged out.");
+      router.replace("/(auth)/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      Alert.alert("Error", "Something went wrong during logout.");
     }
   };
 
   return (
-    <View style={styles.container}>
-      {userInfo ? (
-        <Text style={styles.text}>
-          Welcome, {userInfo.name || userInfo.user_id || "Unknown Student"}
-        </Text>
-      ) : (
-        <Text style={styles.text}>Loading user info...</Text>
-      )}
-      <TouchableOpacity onPress={handleLogout} style={styles.button}>
-        <Text style={styles.buttonText}>Logout</Text>
-      </TouchableOpacity>
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 10 }}>Profile</Text>
+      <Text style={{ fontSize: 18 }}>Welcome, {name || "no name"}</Text>
+
+      <View style={{ marginTop: 20 }}>
+        <Button title="Log Out" onPress={handleLogout} />
+      </View>
     </View>
   );
 };
 
 export default Profile;
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  text: {
-    fontSize: 18,
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: "#dc2626",
-    padding: 10,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-  },
-});
