@@ -51,7 +51,14 @@ const Profile = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#fff",
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+    >
       <Header />
       <View style={styles.profileLogoContainer}>
         <Image
