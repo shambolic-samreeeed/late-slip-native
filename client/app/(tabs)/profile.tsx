@@ -1,27 +1,34 @@
-import { View, Text, Button, Alert } from "react-native";
+import { View, Text, Button, Alert, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import Header from "@/components/Header";
 
 const Profile = () => {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
-    const fetchName = async () => {
+    const fetchUserInfo = async () => {
       try {
         const storedName = await AsyncStorage.getItem("name");
+        const storedEmail = await AsyncStorage.getItem("email");
+
         if (storedName) {
           setName(storedName);
-          console.log("Fetched name in useEffect:", storedName);
-        } else {
-          console.log("No name found in AsyncStorage");
+          console.log("Fetched name:", storedName);
+        }
+
+        if (storedEmail) {
+          setEmail(storedEmail);
+          console.log("Fetched email:", storedEmail);
         }
       } catch (error) {
-        console.error("Error fetching name:", error);
+        console.error("Error fetching user info:", error);
       }
     };
 
-    fetchName();
+    fetchUserInfo();
   }, []);
 
   const handleLogout = async () => {
@@ -36,15 +43,31 @@ const Profile = () => {
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 24, marginBottom: 10 }}>Profile</Text>
-      <Text style={{ fontSize: 18 }}>Welcome, {name || "no name"}</Text>
+    <View style={{ flex: 1 }}>
+      <Header />
 
-      <View style={{ marginTop: 20 }}>
-        <Button title="Log Out" onPress={handleLogout} />
+      <View style={styles.container}>
+        <Text style={{ fontSize: 24, marginBottom: 10 }}>Profile</Text>
+        <Text style={{ fontSize: 18 }}>Welcome, {name || "no name"}</Text>
+        <Text style={{ fontSize: 16, marginTop: 4, color: "gray" }}>
+          Email: {email || "no email"}
+        </Text>
+
+        <View style={{ marginTop: 20 }}>
+          <Button title="Log Out" onPress={handleLogout} />
+        </View>
       </View>
     </View>
   );
 };
 
 export default Profile;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+});
