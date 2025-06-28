@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   profileImage: {
-    height: 120,
-    width: 120,
+    height: 100,
+    width: 100
   },
 });
