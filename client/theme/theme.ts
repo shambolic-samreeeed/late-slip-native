@@ -1,4 +1,3 @@
-// theme/theme.js
 export const LightTheme = {
   dark: false,
   colors: {

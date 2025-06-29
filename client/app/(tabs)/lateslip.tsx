@@ -13,6 +13,7 @@ import { RequestSchema } from "@/utils/lateSlipRequestSchema";
 import Toast from "react-native-toast-message";
 import Header from "../../components/Header";
 import Button from "@/components/Button";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const Lateslip = () => {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -54,7 +55,7 @@ const Lateslip = () => {
           text2: data.message || "Late slip requested successfully",
         });
         resetForm();
-        setRefreshKey((prev) => prev + 1); // trigger refresh
+        setRefreshKey((prev) => prev + 1);
       } else {
         Toast.show({
           type: "error",
@@ -146,18 +147,26 @@ const Lateslip = () => {
             contentContainerStyle={{ paddingVertical: 10 }}
             renderItem={({ item }) => (
               <View style={styles.slipItem}>
-                <Text
-                  style={[
-                    styles.status,
-                    { color: getStatusColor(item.status) },
-                  ]}
-                >
-                  Status: {item.status}
-                </Text>
-                <Text style={styles.reason}>Reason: {item.reason}</Text>
-                <Text style={styles.reason}>
-                  Date: {formatDateTime(item.created_at)}
-                </Text>
+                <View>
+                  <FontAwesome5 name="file-alt" size={34} color="#74C044" />
+                </View>
+                <View>
+                  <View>
+                    <Text style={styles.reason}>Reason: {item.reason}</Text>
+                    <Text style={styles.date}>
+                      {formatDateTime(item.created_at)}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.status,
+                        { color: getStatusColor(item.status) },
+                      ]}
+                    >
+                      Status: {item.status}
+                    </Text>
+                  </View>
+                  <View></View>
+                </View>
               </View>
             )}
           />
@@ -201,16 +210,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   slipItem: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#f2f2f2",
     padding: 12,
     borderRadius: 6,
     marginBottom: 10,
+    gap: 12,
   },
   status: {
     fontWeight: "bold",
-    marginBottom: 4,
   },
   reason: {
     color: "#333",
+  },
+  date: {
+    fontSize: 11,
+    color: "gray",
   },
 });
