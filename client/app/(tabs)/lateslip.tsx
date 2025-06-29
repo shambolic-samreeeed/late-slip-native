@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   status: {
+    fontSize: 11,
     fontWeight: "bold",
   },
   reason: {
