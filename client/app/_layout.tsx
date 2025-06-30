@@ -10,7 +10,7 @@ export default function RootLayout() {
     const checkAuthentication = async () => {
       const token = await AsyncStorage.getItem("token");
       if (token) {
-        router.replace("/notifications");
+        router.replace("/(tabs)");
       } else {
         router.replace("/(auth)/register");
       }
