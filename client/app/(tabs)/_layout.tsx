@@ -24,7 +24,7 @@ const _layout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Schedule",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar-outline" size={22} color={color} />
           ),
@@ -58,4 +58,3 @@ const _layout = () => {
 };
 
 export default _layout;
-

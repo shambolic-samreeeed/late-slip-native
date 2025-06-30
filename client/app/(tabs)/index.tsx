@@ -20,12 +20,12 @@ export default function Index() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        position:'absolute',
-        top:0
+        position: "absolute",
+        top: 0,
       }}
     >
-      <View style={{display:'flex'}}>
-        <Header />  
+      <View style={{ display: "flex" }}>
+        <Header />
       </View>
       <Text>Welcome!</Text>
       <Link href="/(auth)/login">Login</Link>

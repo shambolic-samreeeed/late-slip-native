@@ -4,6 +4,7 @@ import {
   TextInput,
   StyleSheet,
   FlatList,
+  Image,
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -165,7 +166,6 @@ const Lateslip = () => {
                       Status: {item.status}
                     </Text>
                   </View>
-                  <View></View>
                 </View>
               </View>
             )}

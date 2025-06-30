@@ -1,5 +1,7 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 const Header = () => {
   return (
@@ -10,7 +12,14 @@ const Header = () => {
           style={styles.image}
         />
       </View>
-      <Text style={styles.logoText}>Herald Sync</Text>
+      {/* <Text style={styles.logoText}>Herald Sync</Text> */}
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push("/notifications")}
+      >
+        <FontAwesome5 name="bell" size={24} color="white" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -65,13 +74,7 @@ const styles = StyleSheet.create({
     color: "red",
     marginBottom: 10,
   },
-  button: {
-    backgroundColor: "#74C044",
-    paddingVertical: 12,
-    borderRadius: 6,
-    alignItems: "center",
-    marginTop: 10,
-  },
+  button: {},
   buttonText: {
     color: "white",
     fontSize: 16,
