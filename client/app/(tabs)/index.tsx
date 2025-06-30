@@ -12,6 +12,7 @@ import { router } from "expo-router";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import UpcommingClass from "@/components/UpcommingClass";
+import TodaysClass from "@/components/TodaysClass";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -67,6 +68,7 @@ const Profile = () => {
 
       <View style={styles.container}>
         <UpcommingClass />
+        <TodaysClass/>
       </View>
     </View>
   );
