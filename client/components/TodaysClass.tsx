@@ -36,7 +36,9 @@ const TodaysClass = () => {
 export default TodaysClass;
 
 const styles = StyleSheet.create({
-  scrollContainer: {},
+  scrollContainer: {
+
+  },
   card: {
     width: 200,
     height: 120,

@@ -1,8 +1,40 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Button from "@/components/Button";
+
+const AllNotifications = [
+  {
+    id: 1,
+    title: "Object Oriented Programming",
+    Description:
+      "Your OOP assignment has been graded. Check the portal for details.",
+  },
+  {
+    id: 2,
+    title: "Concept & Technologies of AI",
+    Description: "Reminder: AI project proposal is due this Friday at 5 PM.",
+  },
+  {
+    id: 3,
+    title: "System Maintenance",
+    Description:
+      "The student portal will be under maintenance on Saturday from 1 AM to 3 AM.",
+  },
+  {
+    id: 4,
+    title: "New Announcement",
+    Description:
+      "A new elective course on Cloud Computing has been added to the curriculum.",
+  },
+];
 
 const Notifications = () => {
   const router = useRouter();
@@ -34,10 +66,25 @@ const Notifications = () => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => setUnread(true)}>
-          <Text>Unread</Text>
+          <Text>New Unread</Text>
         </TouchableOpacity>
       </View>
-      {unread ? <Text>Unread</Text> : <Text> Read</Text>}
+      {unread ? (
+        <Text>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContainer}
+          >
+            {AllNotifications.map((card) => (
+              <View key={card.id} style={styles.card}>
+                <Text style={styles.cardText}>{card.title}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        </Text>
+      ) : (
+        <Text> Read</Text>
+      )}
     </View>
   );
 };
@@ -65,5 +112,15 @@ const styles = StyleSheet.create({
   buttonContainer: {
     display: "flex",
     flexDirection: "row",
+    gap: 10,
+  },
+  cardText: {},
+  scrollContainer: {},
+  card: {
+    backgroundColor: "green",
+    margin: 10,
+    padding: 20,
+    width: 370,
+    display: "flex",
   },
 });
