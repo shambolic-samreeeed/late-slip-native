@@ -46,7 +46,7 @@ const TodaysClass = () => {
 
   return (
     <View>
-      <View style={{ marginTop: 30, marginBottom: 20 }}>
+      <View style={{ marginTop: 40, marginBottom: 20 }}>
         <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>
           Classes Today
         </Text>
@@ -90,13 +90,15 @@ export default TodaysClass;
 const styles = StyleSheet.create({
   scrollContainer: {},
   card: {
-    width: 200,
-    height: 200,
+    width: 250,
+    height: 180,
     borderWidth: 1,
     borderRadius: 20,
     marginRight: 20,
     borderColor: "#DFDFDF",
     padding: 20,
+    display: "flex",
+    justifyContent: "space-around",
   },
   cardText: {
     color: "black",
@@ -109,7 +111,12 @@ const styles = StyleSheet.create({
   },
   timingText: {
     paddingVertical: 10,
-    backgroundColor: "red",
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 5,
+    fontSize: 12,
+    fontWeight: 500,
   },
   timeContainer: {
     display: "flex",

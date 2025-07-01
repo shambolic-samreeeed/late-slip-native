@@ -2,24 +2,34 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { router } from "expo-router";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const Header = () => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.logoWrapper}>
-        <Image
+        {/* <Image
           source={require("../assets/images/footer-logo.png")}
           style={styles.image}
-        />
+        /> */}
       </View>
       {/* <Text style={styles.logoText}>Herald Sync</Text> */}
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push("/notifications")}
-      >
-        <FontAwesome5 name="bell" size={24} color="white" />
-      </TouchableOpacity>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/notifications")}
+        >
+          <FontAwesome5 name="bell" size={24} color="#2F4858CC" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/notifications")}
+        >
+          <Entypo name="menu" size={24} color="#2F4858CC" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -32,7 +42,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#3C3C3C",
+    // backgroundColor: "#3C3C3C",
     paddingHorizontal: 20,
   },
   logoWrapper: {
@@ -79,5 +89,11 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  buttonsContainer: {
+    display:'flex',
+    flexDirection:'row',
+    alignItems:'center',
+    gap:10,
   },
 });

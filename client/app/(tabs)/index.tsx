@@ -58,17 +58,24 @@ const Profile = () => {
           {/* <Text style={styles.emailText}> {email || "..."}</Text> */}
         </View>
 
-        <View>
+        <View
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Image
             style={styles.profileImage}
             source={require("../../assets/images/6858504.png")}
           />
+          <Text style={{fontSize:10, fontWeight:300}}>L5CG5</Text>
         </View>
       </View>
 
       <View style={styles.container}>
         <UpcommingClass />
-        <TodaysClass/>
+        <TodaysClass />
       </View>
     </View>
   );
@@ -111,11 +118,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    margin: 30,
+    marginHorizontal: 20,
   },
   profileImage: {
-    height: 80,
-    width: 80,
+    height: 100,
+    width: 100,
   },
   nameContainer: {},
   textTwo: {
