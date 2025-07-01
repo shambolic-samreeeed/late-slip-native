@@ -32,6 +32,7 @@ const TodaysClass = () => {
     const fetchSchedule = async () => {
       try {
         const data = await getTodaysSchedule();
+
         setSchedule(data);
       } catch (err: any) {
         console.error("Failed to load the schedule. ", err);
@@ -55,32 +56,37 @@ const TodaysClass = () => {
         </Text>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        {Array.isArray(schedules) &&
-          schedules.map((schedule) => (
-            <View style={styles.card}>
-              <Text key={schedule.id} style={styles.moduleText}>
-                {schedule.module_name}
-              </Text>
-              <View>
-                <Text key={schedule.id} style={styles.timingText}>
-                  <Ionicons
-                    name="time-outline"
-                    size={14}
-                    color="black"
-                    style={styles.timeContainer}
-                  />
-                  {schedule.start_time}-{schedule.end_time}
+      {Array.isArray(schedules) && schedules.length > 0 ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContainer}
+        >
+          {schedules.map((schedule) => (
+            <View key={schedule.id} style={styles.card}>
+              <Text style={styles.moduleText}>{schedule.module_name}</Text>
+
+              <View style={styles.timeRow}>
+                <Ionicons
+                  name="time-outline"
+                  size={14}
+                  color="black"
+                  style={styles.timeIcon}
+                />
+                <Text style={styles.timingText}>
+                  {schedule.start_time} - {schedule.end_time}
                 </Text>
               </View>
-              <Button onPress={handleReminder} title="Set Reminder"></Button>
+
+              <Button onPress={handleReminder} title="Set Reminder" />
             </View>
           ))}
-      </ScrollView>
+        </ScrollView>
+      ) : (
+        <Text style={{ fontStyle: "italic", marginTop: 10 }}>
+          No classes scheduled today ENJOY! 🥳.
+        </Text>
+      )}
     </View>
   );
 };
@@ -88,38 +94,60 @@ const TodaysClass = () => {
 export default TodaysClass;
 
 const styles = StyleSheet.create({
-  scrollContainer: {},
-  card: {
-    width: 250,
-    height: 180,
-    borderWidth: 1,
-    borderRadius: 20,
-    marginRight: 20,
-    borderColor: "#DFDFDF",
+  container: {
     padding: 20,
-    display: "flex",
-    justifyContent: "space-around",
   },
-  cardText: {
-    color: "black",
-    fontSize: 18,
+  header: {
+    marginTop: 30,
+    marginBottom: 20,
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  headerSubtitle: {
+    fontWeight: "300",
+  },
+  scrollContainer: {
+    paddingRight: 10,
+  },
+  card: {
+    width: 220,
+    borderWidth: 1,
+    borderRadius: 16,
+    borderColor: "#DFDFDF",
+    marginRight: 16,
+    padding: 16,
+    backgroundColor: "#FAFAFA",
+    justifyContent: "space-between",
   },
   moduleText: {
     fontSize: 16,
-    fontWeight: 700,
+    fontWeight: "bold",
+    paddingBottom: 8,
+  },
+  timeRow: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingBottom: 10,
   },
-  timingText: {
-    paddingVertical: 10,
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    gap: 5,
-    fontSize: 12,
-    fontWeight: 500,
+  timeIcon: {
+    marginRight: 6,
   },
-  timeContainer: {
-    display: "flex",
-    flexDirection: "row",
+  timingText: {
+    fontSize: 14,
+    color: "#333",
+  },
+  detailText: {
+    fontSize: 13,
+    color: "#333",
+    marginBottom: 4,
+  },
+  noClassText: {
+    fontStyle: "italic",
+    color: "#777",
+    fontSize: 14,
+    marginTop: 10,
   },
 });
