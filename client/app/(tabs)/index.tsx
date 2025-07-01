@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    margin: 20,
+    margin: 30,
   },
   profileImage: {
     height: 80,

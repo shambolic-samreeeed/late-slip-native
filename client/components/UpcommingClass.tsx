@@ -37,6 +37,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 20,
     borderRadius: 20,
+    height:119,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 5,
   },
   leftContainer: {
     display: "flex",
