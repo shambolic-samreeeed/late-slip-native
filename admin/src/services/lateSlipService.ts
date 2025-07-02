@@ -22,3 +22,30 @@ export const getAllLateSlips = async () => {
     return [];
   }
 };
+
+export const approveLateSlip = async (
+  LateSLipId: string,
+  StudentID: string
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No Token Found!");
+
+    const response = await axios.put(
+      `${API_URL}/admin/lateslips/approve/`,
+      {
+        LateSLipId,
+        StudentID,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (err: any) {
+    console.log("error", err);
+  }
+};
