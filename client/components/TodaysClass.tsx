@@ -33,7 +33,26 @@ const TodaysClass = () => {
       try {
         const data = await getTodaysSchedule();
 
-        setSchedule(data);
+        const now = new Date();
+
+        const filtered = data.filter((cls: ScheduleItem) => {
+          const [endHour, endMin] = cls.end_time.split(":").map(Number);
+          const [startHour, startMin] = cls.start_time.split(":").map(Number);
+
+          const startTime = new Date(now);
+          startTime.setHours(startHour, startMin, 0, 0);
+
+          const endTime = new Date(now);
+          endTime.setHours(endHour, endMin, 0, 0);
+
+          if (endTime <= startTime) {
+            endTime.setDate(endTime.getDate() + 1);
+          }
+
+          return now < endTime;
+        });
+
+        setSchedule(filtered);
       } catch (err: any) {
         console.error("Failed to load the schedule. ", err);
       }

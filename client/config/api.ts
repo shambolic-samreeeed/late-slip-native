@@ -1,6 +1,5 @@
-// const IP = '10.22.6.190'
-// export const BASE_URL = `http://${IP}:8080`;
+export const BASE_URL = "http://localhost:8080";
 
 // Local tunnel URL
-export const BASE_URL =
-  "https://thing-surface-alternatives-participant.trycloudflare.com";
+// export const BASE_URL =
+//   "https://ra-movements-one-ruling.trycloudflare.com";
