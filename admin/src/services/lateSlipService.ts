@@ -5,7 +5,7 @@ const API_URL = BASE_URL;
 
 export const getAllLateSlips = async () => {
   try {
-    const token = localStorage.getItem("token"); 
+    const token = localStorage.getItem("token");
     if (!token) throw new Error("Token not found");
 
     const response = await axios.get(`${API_URL}/admin/lateslips`, {
