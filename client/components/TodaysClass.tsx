@@ -67,10 +67,20 @@ const TodaysClass = () => {
   return (
     <View>
       <View style={{ marginTop: 40, marginBottom: 20 }}>
-        <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 5 }}>
+        <Text
+          style={{
+            marginBottom: 5,
+            fontFamily: "Montserrat",
+            fontWeight: 700,
+            fontSize: 16,
+            color: "#2F4858",
+          }}
+        >
           Classes Today
         </Text>
-        <Text style={{ fontWeight: 200 }}>
+        <Text
+          style={{ fontWeight: 400, fontFamily: "Montserrat", fontSize: "12" }}
+        >
           Your Class Insights, Please be on Schedule!
         </Text>
       </View>
@@ -142,9 +152,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   moduleText: {
+    fontFamily: "Montserrat",
+    fontWeight: 700,
     fontSize: 16,
-    fontWeight: "bold",
-    paddingBottom: 8,
+    color: "#2F4858",
+    paddingBottom: 15,
   },
   timeRow: {
     flexDirection: "row",
@@ -155,8 +167,10 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   timingText: {
-    fontSize: 14,
-    color: "#333",
+    fontFamily: "Montserrat",
+    fontWeight: 500,
+    fontSize: 12,
+    color: "#4B4E52",
   },
   detailText: {
     fontSize: 13,

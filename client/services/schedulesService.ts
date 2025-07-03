@@ -17,12 +17,12 @@ export const getTodaysSchedule = async () => {
   }
 };
 
-//test function
+// test function
 // export const getTodaysSchedule = async () => {
 //   return [
 //     {
 //       module_name: "Test Class",
-//       start_time: new Date(new Date().getTime() - 5 * 60000) 
+//       start_time: new Date(new Date().getTime() - 5 * 60000)
 //         .toTimeString()
 //         .slice(0, 5),
 //       end_time: new Date(new Date().getTime() + 55 * 60000)

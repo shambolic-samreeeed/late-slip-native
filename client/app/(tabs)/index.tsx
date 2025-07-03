@@ -91,14 +91,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 10,
-    fontWeight: "bold",
-  },
+
   nameText: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontFamily: "Montserrat",
+    fontWeight: 700,
     color: "#2F4858",
   },
   emailText: {
@@ -127,7 +124,9 @@ const styles = StyleSheet.create({
   },
   nameContainer: {},
   textTwo: {
-    fontWeight: "100",
     fontSize: 12,
+    fontFamily: "Montserrat",
+    fontWeight: 400,
+    color: "#4B4E52",
   },
 });

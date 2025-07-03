@@ -24,9 +24,7 @@ const LateSlipButton: React.FC<Props> = ({ startTime }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
-        Apply Late Slip
-      </Text>
+      <Text style={styles.label}>Apply Late Slip</Text>
       <View style={canApply ? styles.buttonWrapper : styles.disabledWrapper}>
         <Button title={canApply ? "Apply" : "Late Slip Not Available"} />
       </View>
@@ -38,23 +36,25 @@ export default LateSlipButton;
 
 const styles = StyleSheet.create({
   container: {
+    height:106,
     marginTop: 10,
     borderWidth: 1,
     borderColor: "#DFDFDF",
     paddingVertical: 20,
     paddingHorizontal: 20,
     borderRadius: 20,
+    
   },
   label: {
-    color: "black",
-    marginBottom: 5,
-    fontWeight:600,
-    fontSize:12,
+    fontFamily: "Montserrat",
+    fontWeight: 600,
+    fontSize: 12,
+    color: "#2F4858",
   },
   buttonWrapper: {
     opacity: 1,
   },
   disabledWrapper: {
-    opacity: 0.5, // Faded look for disabled button
+    opacity: 0.6,
   },
 });

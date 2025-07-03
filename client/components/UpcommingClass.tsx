@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   leftContainer: {
-    flex: 1,
-    gap: 10,
+    gap: 15,
+    width:'80%'
   },
   rightContainer: {
     flexDirection: "row",
@@ -109,12 +109,15 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   label: {
-    fontWeight: "500",
+    fontFamily: "Montserrat",
+    fontWeight: 600,
+    fontSize: 12,
     color: "#444444",
   },
   module: {
-    fontWeight: "bold",
-    fontSize: 18,
+    fontFamily: "Montserrat",
+    fontWeight: 700,
+    fontSize: 16,
     color: "#FFFFFF",
   },
   time: {

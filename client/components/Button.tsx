@@ -38,8 +38,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Montserrat",
+    fontWeight: 600,
+    fontSize: 14,
+    color: "#FFFFFF",
   },
 });
