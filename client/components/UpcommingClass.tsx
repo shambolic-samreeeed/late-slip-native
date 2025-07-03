@@ -2,8 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { getTodaysSchedule } from "@/services/schedulesService";
+import ApplyLateSlip from "@/components/ApplyLateSlip"; // ✅ import correctly
 
-const UpcommingClass = () => {
+const UpcomingClass = () => {
   const [upcoming, setUpcoming] = useState<any>(null);
 
   useEffect(() => {
@@ -13,21 +14,19 @@ const UpcommingClass = () => {
         const now = new Date();
         const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
-        // Sort schedules by start_time
         const sorted = response.sort((a: any, b: any) => {
           const [aHour, aMin] = a.start_time.split(":").map(Number);
           const [bHour, bMin] = b.start_time.split(":").map(Number);
           return aHour * 60 + aMin - (bHour * 60 + bMin);
         });
 
-        // Find the next class or the ongoing one
         const nextClass = sorted.find((cls: any) => {
           const [startHour, startMin] = cls.start_time.split(":").map(Number);
           const [endHour, endMin] = cls.end_time.split(":").map(Number);
           const startMinutes = startHour * 60 + startMin;
           const endMinutes = endHour * 60 + endMin;
 
-          return nowMinutes < endMinutes; // includes both next and ongoing
+          return nowMinutes < endMinutes;
         });
 
         setUpcoming(nextClass || null);
@@ -38,7 +37,6 @@ const UpcommingClass = () => {
 
     fetchData();
 
-    // Update every minute
     const interval = setInterval(fetchData, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -63,32 +61,28 @@ const UpcommingClass = () => {
   })();
 
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.leftContainer}>
-        <Text style={{ fontWeight: "500", color: "#444444" }}>
-          {isOngoing ? "Ongoing Class" : "Upcoming Class"}
-        </Text>
-        <Text
-          style={{
-            fontWeight: "bold",
-            fontSize: 18,
-            color: "#FFFFFF",
-          }}
-        >
-          {upcoming.module_name}
-        </Text>
+    <View>
+      <View style={styles.mainContainer}>
+        <View style={styles.leftContainer}>
+          <Text style={styles.label}>
+            {isOngoing ? "Ongoing Class" : "Upcoming Class"}
+          </Text>
+          <Text style={styles.module}>{upcoming.module_name}</Text>
+        </View>
+
+        <View style={styles.rightContainer}>
+          <FontAwesome5 name="clock" size={18} color="white" />
+          <Text style={styles.time}>{upcoming.start_time}</Text>
+        </View>
       </View>
-      <View style={styles.rightContainer}>
-        <FontAwesome5 name="clock" size={18} color="white" />
-        <Text style={{ color: "#FFFFFF", fontWeight: "bold" }}>
-          {upcoming.start_time}
-        </Text>
-      </View>
+
+      {/* Render ApplyLateSlip outside the box but below it */}
+      <ApplyLateSlip startTime={upcoming.start_time} />
     </View>
   );
 };
 
-export default UpcommingClass;
+export default UpcomingClass;
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -97,23 +91,34 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 20,
     borderRadius: 20,
-    height: 119,
+    height: 140,
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
     elevation: 5,
+    marginBottom: 10,
   },
   leftContainer: {
+    flex: 1,
     gap: 10,
-    width: "80%",
   },
   rightContainer: {
     flexDirection: "row",
     alignItems: "flex-start",
     gap: 5,
+  },
+  label: {
+    fontWeight: "500",
+    color: "#444444",
+  },
+  module: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "#FFFFFF",
+  },
+  time: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
 });

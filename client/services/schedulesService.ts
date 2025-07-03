@@ -16,3 +16,18 @@ export const getTodaysSchedule = async () => {
     console.log("Error fetching todays Schedules: ", error);
   }
 };
+
+//test function
+// export const getTodaysSchedule = async () => {
+//   return [
+//     {
+//       module_name: "Test Class",
+//       start_time: new Date(new Date().getTime() - 5 * 60000) 
+//         .toTimeString()
+//         .slice(0, 5),
+//       end_time: new Date(new Date().getTime() + 55 * 60000)
+//         .toTimeString()
+//         .slice(0, 5),
+//     },
+//   ];
+// };

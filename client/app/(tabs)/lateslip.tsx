@@ -42,7 +42,6 @@ const Lateslip = () => {
     fetchSlips();
   }, [refreshKey]);
 
-  // Form submission
   const handleSubmit = async (
     values: { reason: string },
     { resetForm }: { resetForm: () => void }
@@ -102,7 +101,7 @@ const Lateslip = () => {
     <View style={{ flex: 1 }}>
       <Header />
       <View style={styles.container}>
-        <Text style={styles.heading}>Request a Lateslip</Text>
+        {/* <Text style={styles.heading}>Request a Lateslip</Text>
 
         <Formik
           initialValues={{ reason: "" }}
@@ -134,7 +133,7 @@ const Lateslip = () => {
               <Button onPress={handleSubmit} title="Submit" />
             </>
           )}
-        </Formik>
+        </Formik> */}
 
         <Text style={styles.statusHeading}>Your Late Slips</Text>
         {loading ? (
