@@ -38,6 +38,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a636b030-0352-4826-bd20-6b1ede986b4d"
+      }
+    },
+    "owner": "shambolixxx"
   }
 }

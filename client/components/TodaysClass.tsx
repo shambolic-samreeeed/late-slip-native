@@ -1,10 +1,4 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { getTodaysSchedule } from "@/services/schedulesService";
 import Button from "./Button";
@@ -71,7 +65,7 @@ const TodaysClass = () => {
           style={{
             marginBottom: 5,
             fontFamily: "Montserrat",
-            fontWeight: 700,
+            fontWeight: "700",
             fontSize: 16,
             color: "#2F4858",
           }}
@@ -79,7 +73,11 @@ const TodaysClass = () => {
           Classes Today
         </Text>
         <Text
-          style={{ fontWeight: 400, fontFamily: "Montserrat", fontSize: 12 }}
+          style={{
+            fontWeight: "400",
+            fontFamily: "Montserrat",
+            fontSize: 12,
+          }}
         >
           Your Class Insights, Please be on Schedule!
         </Text>
@@ -93,26 +91,38 @@ const TodaysClass = () => {
         >
           {schedules.map((schedule) => (
             <View key={schedule.id} style={styles.card}>
-              <Text style={styles.moduleText}>{schedule.module_name}</Text>
-
-              <View style={styles.timeRow}>
-                <Ionicons
-                  name="time-outline"
-                  size={14}
-                  color="black"
-                  style={styles.timeIcon}
-                />
-                <Text style={styles.timingText}>
-                  {schedule.start_time} - {schedule.end_time}
+              {/* Top section: Module name */}
+              <View style={{ flexGrow: 1 }}>
+                <Text
+                  style={styles.moduleText}
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                >
+                  {schedule.module_name}
                 </Text>
               </View>
 
-              <Button onPress={handleReminder} title="Set Reminder" />
+              {/* Bottom section: Time + Button */}
+              <View>
+                <View style={styles.timeRow}>
+                  <Ionicons
+                    name="time-outline"
+                    size={14}
+                    color="black"
+                    style={styles.timeIcon}
+                  />
+                  <Text style={styles.timingText}>
+                    {schedule.start_time} - {schedule.end_time}
+                  </Text>
+                </View>
+
+                <Button onPress={handleReminder} title="Set Reminder" />
+              </View>
             </View>
           ))}
         </ScrollView>
       ) : (
-        <Text style={{ fontStyle: "italic", marginTop: 10 }}>
+        <Text style={styles.noClassText}>
           No classes scheduled today ENJOY! 🥳.
         </Text>
       )}
@@ -123,21 +133,6 @@ const TodaysClass = () => {
 export default TodaysClass;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  header: {
-    marginTop: 30,
-    marginBottom: 20,
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  headerSubtitle: {
-    fontWeight: "300",
-  },
   scrollContainer: {
     paddingRight: 10,
   },
@@ -150,32 +145,28 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#FAFAFA",
     justifyContent: "space-between",
+    minHeight: 160, // Keeps height consistent
   },
   moduleText: {
     fontFamily: "Montserrat",
-    fontWeight: 700,
+    fontWeight: "700",
     fontSize: 16,
     color: "#2F4858",
-    paddingBottom: 15,
+    marginBottom: 10,
   },
   timeRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingBottom: 10,
+    marginBottom: 10,
   },
   timeIcon: {
     marginRight: 6,
   },
   timingText: {
     fontFamily: "Montserrat",
-    fontWeight: 500,
+    fontWeight: "500",
     fontSize: 12,
     color: "#4B4E52",
-  },
-  detailText: {
-    fontSize: 13,
-    color: "#333",
-    marginBottom: 4,
   },
   noClassText: {
     fontStyle: "italic",

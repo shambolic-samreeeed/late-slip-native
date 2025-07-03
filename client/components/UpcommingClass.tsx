@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { getTodaysSchedule } from "@/services/schedulesService";
-import ApplyLateSlip from "@/components/ApplyLateSlip"; // ✅ custom component
+import ApplyLateSlip from "@/components/ApplyLateSlip";
 
 const UpcomingClass = () => {
   const [upcoming, setUpcoming] = useState<any>(null);
@@ -46,7 +46,9 @@ const UpcomingClass = () => {
   if (loading) {
     return (
       <View style={styles.mainContainer}>
-        <Text style={{ color: "white", fontFamily: "Montserrat" }}>Loading...</Text>
+        <Text style={{ color: "white", fontFamily: "Montserrat" }}>
+          Loading...
+        </Text>
       </View>
     );
   }
@@ -54,7 +56,9 @@ const UpcomingClass = () => {
   if (!upcoming) {
     return (
       <View style={styles.mainContainer}>
-        <Text style={{ color: "white", fontFamily: "Montserrat" }}>No upcoming class 🎉</Text>
+        <Text style={{ color: "white", fontFamily: "Montserrat" }}>
+          No upcoming class 🎉
+        </Text>
       </View>
     );
   }
@@ -86,8 +90,28 @@ const UpcomingClass = () => {
         </View>
       </View>
 
-      {/* Button appears just below the card */}
-      <ApplyLateSlip startTime={upcoming.start_time} />
+      {/* Conditionally show ApplyLateSlip or message */}
+      {(() => {
+        const now = new Date();
+        const nowMinutes = now.getHours() * 60 + now.getMinutes();
+        const [startHour, startMin] = upcoming.start_time
+          .split(":")
+          .map(Number);
+        const startMinutes = startHour * 60 + startMin;
+        const minutesSinceStart = nowMinutes - startMinutes;
+
+        if (minutesSinceStart >= 0 && minutesSinceStart < 15) {
+          return <ApplyLateSlip startTime={upcoming.start_time} />;
+        } else if (minutesSinceStart >= 15) {
+          return (
+            <Text style={styles.lateText}>
+              Late slip not available after 15 minutes.
+            </Text>
+          );
+        } else {
+          return null;
+        }
+      })()}
     </View>
   );
 };
@@ -133,5 +157,13 @@ const styles = StyleSheet.create({
   time: {
     color: "#FFFFFF",
     fontWeight: "bold",
+  },
+  lateText: {
+    textAlign: "center",
+    marginTop: 10,
+    color: "#FF3B30",
+    fontFamily: "Montserrat",
+    fontSize: 12,
+    fontWeight: "500",
   },
 });

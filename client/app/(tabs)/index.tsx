@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "@/components/Header";
@@ -31,7 +31,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <View style={styles.screen}>
+    <ScrollView style={styles.screen}>
       <Header />
 
       {/* Profile Top Section */}
@@ -83,7 +83,7 @@ const Profile = () => {
           </>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   nameText: {
     fontSize: 16,
     fontFamily: "Montserrat",
-    fontWeight: "900",
+    fontWeight: 700,
     color: "#2F4858",
   },
   emailText: {

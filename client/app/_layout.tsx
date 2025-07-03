@@ -12,8 +12,7 @@ export default function RootLayout() {
   const router = useRouter();
 
   const [fontsLoaded] = useFonts({
-    MontserratBlack: require("../assets/fonts/Montserrat-Black.ttf"),
-    Montserrat: require("../assets/fonts/Montserrat-Regular.ttf"),
+    Montserrat: require("../assets/fonts/Montserrat-VariableFont_wght.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {
