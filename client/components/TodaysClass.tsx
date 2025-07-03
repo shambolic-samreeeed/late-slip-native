@@ -79,7 +79,7 @@ const TodaysClass = () => {
           Classes Today
         </Text>
         <Text
-          style={{ fontWeight: 400, fontFamily: "Montserrat", fontSize: "12" }}
+          style={{ fontWeight: 400, fontFamily: "Montserrat", fontSize: 12 }}
         >
           Your Class Insights, Please be on Schedule!
         </Text>

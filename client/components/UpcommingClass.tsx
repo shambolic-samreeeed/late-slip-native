@@ -2,10 +2,11 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { getTodaysSchedule } from "@/services/schedulesService";
-import ApplyLateSlip from "@/components/ApplyLateSlip"; // ✅ import correctly
+import ApplyLateSlip from "@/components/ApplyLateSlip"; // ✅ custom component
 
 const UpcomingClass = () => {
   const [upcoming, setUpcoming] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,21 +31,30 @@ const UpcomingClass = () => {
         });
 
         setUpcoming(nextClass || null);
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching schedule:", err);
+        setLoading(false);
       }
     };
 
     fetchData();
-
     const interval = setInterval(fetchData, 60000);
     return () => clearInterval(interval);
   }, []);
 
+  if (loading) {
+    return (
+      <View style={styles.mainContainer}>
+        <Text style={{ color: "white", fontFamily: "Montserrat" }}>Loading...</Text>
+      </View>
+    );
+  }
+
   if (!upcoming) {
     return (
       <View style={styles.mainContainer}>
-        <Text style={{ color: "white" }}>No upcoming class 🎉</Text>
+        <Text style={{ color: "white", fontFamily: "Montserrat" }}>No upcoming class 🎉</Text>
       </View>
     );
   }
@@ -76,7 +86,7 @@ const UpcomingClass = () => {
         </View>
       </View>
 
-      {/* Render ApplyLateSlip outside the box but below it */}
+      {/* Button appears just below the card */}
       <ApplyLateSlip startTime={upcoming.start_time} />
     </View>
   );
@@ -101,7 +111,7 @@ const styles = StyleSheet.create({
   },
   leftContainer: {
     gap: 15,
-    width:'80%'
+    width: "80%",
   },
   rightContainer: {
     flexDirection: "row",
@@ -110,13 +120,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: "Montserrat",
-    fontWeight: 600,
+    fontWeight: "600",
     fontSize: 12,
     color: "#444444",
   },
   module: {
     fontFamily: "Montserrat",
-    fontWeight: 700,
+    fontWeight: "700",
     fontSize: 16,
     color: "#FFFFFF",
   },
