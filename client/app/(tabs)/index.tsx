@@ -13,6 +13,7 @@ import Header from "@/components/Header";
 import Button from "@/components/Button";
 import UpcommingClass from "@/components/UpcommingClass";
 import TodaysClass from "@/components/TodaysClass";
+import RequestLateSlip from "@/components/RequestLateSlip";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -69,12 +70,13 @@ const Profile = () => {
             style={styles.profileImage}
             source={require("../../assets/images/6858504.png")}
           />
-          <Text style={{fontSize:10, fontWeight:300}}>L5CG5</Text>
+          <Text style={{ fontSize: 10, fontWeight: 300 }}>L5CG5</Text>
         </View>
       </View>
 
       <View style={styles.container}>
         <UpcommingClass />
+        <RequestLateSlip />
         <TodaysClass />
       </View>
     </View>
