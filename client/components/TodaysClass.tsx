@@ -60,7 +60,7 @@ const TodaysClass = () => {
 
   return (
     <View>
-      <View style={{ marginTop: 40, marginBottom: 20 }}>
+      <View style={{ marginTop: 25, marginBottom: 20 }}>
         <Text
           style={{
             marginBottom: 5,

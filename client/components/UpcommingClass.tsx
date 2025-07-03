@@ -26,7 +26,6 @@ const UpcomingClass = () => {
           const [endHour, endMin] = cls.end_time.split(":").map(Number);
           const startMinutes = startHour * 60 + startMin;
           const endMinutes = endHour * 60 + endMin;
-
           return nowMinutes < endMinutes;
         });
 
@@ -46,9 +45,7 @@ const UpcomingClass = () => {
   if (loading) {
     return (
       <View style={styles.mainContainer}>
-        <Text style={{ color: "white", fontFamily: "Montserrat" }}>
-          Loading...
-        </Text>
+        <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
   }
@@ -56,23 +53,21 @@ const UpcomingClass = () => {
   if (!upcoming) {
     return (
       <View style={styles.mainContainer}>
-        <Text style={{ color: "white", fontFamily: "Montserrat" }}>
-          No upcoming class 🎉
-        </Text>
+        <Text style={styles.loadingText}>No upcoming class 🎉</Text>
       </View>
     );
   }
 
-  const isOngoing = (() => {
-    const now = new Date();
-    const nowMinutes = now.getHours() * 60 + now.getMinutes();
-    const [startHour, startMin] = upcoming.start_time.split(":").map(Number);
-    const [endHour, endMin] = upcoming.end_time.split(":").map(Number);
-    const startMinutes = startHour * 60 + startMin;
-    const endMinutes = endHour * 60 + endMin;
+  const now = new Date();
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+  const [startHour, startMin] = upcoming.start_time.split(":").map(Number);
+  const startMinutes = startHour * 60 + startMin;
+  const minutesSinceStart = nowMinutes - startMinutes;
 
-    return nowMinutes >= startMinutes && nowMinutes < endMinutes;
-  })();
+  const isOngoing =
+    nowMinutes >= startMinutes && nowMinutes < startMinutes + 60; // assumes class is 1 hr max
+
+  const showLateSlip = minutesSinceStart >= 0 && minutesSinceStart < 15;
 
   return (
     <View>
@@ -90,28 +85,12 @@ const UpcomingClass = () => {
         </View>
       </View>
 
-      {/* Conditionally show ApplyLateSlip or message */}
-      {(() => {
-        const now = new Date();
-        const nowMinutes = now.getHours() * 60 + now.getMinutes();
-        const [startHour, startMin] = upcoming.start_time
-          .split(":")
-          .map(Number);
-        const startMinutes = startHour * 60 + startMin;
-        const minutesSinceStart = nowMinutes - startMinutes;
-
-        if (minutesSinceStart >= 0 && minutesSinceStart < 15) {
-          return <ApplyLateSlip startTime={upcoming.start_time} />;
-        } else if (minutesSinceStart >= 15) {
-          return (
-            <Text style={styles.lateText}>
-              Late slip not available after 15 minutes.
-            </Text>
-          );
-        } else {
-          return null;
-        }
-      })()}
+      {showLateSlip ? (
+        <ApplyLateSlip startTime={upcoming.start_time} />
+      ) : (
+        <>
+        </>
+      )}
     </View>
   );
 };
@@ -158,12 +137,16 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "bold",
   },
+  loadingText: {
+    color: "white",
+    fontFamily: "Montserrat",
+  },
   lateText: {
     textAlign: "center",
     marginTop: 10,
-    color: "#FF3B30",
-    fontFamily: "Montserrat",
+    color: "#D00000",
     fontSize: 12,
+    fontFamily: "Montserrat",
     fontWeight: "500",
   },
 });

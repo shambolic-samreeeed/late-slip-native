@@ -6,7 +6,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 const _layout = () => {
   return (
     <Tabs
-      initialRouteName="lateslip"
+      initialRouteName="index"
       screenOptions={{
         tabBarActiveTintColor: "#74C044",
         tabBarInactiveTintColor: "white",
@@ -34,7 +34,7 @@ const _layout = () => {
       <Tabs.Screen
         name="lateslip"
         options={{
-          title: "Request Slip",
+          title: "Late Slips",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="clipboard-edit-outline"
