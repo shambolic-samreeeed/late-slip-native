@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: "Montserrat",
     fontWeight: 600,
-    fontSize: 14,
+    fontSize: 16,
     color: "#FFFFFF",
   },
 });

@@ -1,27 +1,19 @@
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  TextInput,
-  StyleSheet,
   FlatList,
-  Image,
   ActivityIndicator,
+  StyleSheet,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { Formik } from "formik";
-import { requestLateSlip, getMyLateSlips } from "@/services/lateSlipServices";
-import { RequestSchema } from "@/utils/lateSlipRequestSchema";
-import Toast from "react-native-toast-message";
-import Header from "../../components/Header";
-import Button from "@/components/Button";
+import { getMyLateSlips } from "@/services/lateSlipServices";
+import Header from "@/components/Header";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 const Lateslip = () => {
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [slips, setSlips] = useState<any[]>([]);
+  const [slips, setSlips] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch slips
   useEffect(() => {
     const fetchSlips = async () => {
       try {
@@ -29,8 +21,6 @@ const Lateslip = () => {
         const response = await getMyLateSlips();
         if (response.success) {
           setSlips(response.lateSlips || []);
-        } else {
-          console.warn("Failed to fetch slips");
         }
       } catch (error) {
         console.error("Error fetching slips:", error);
@@ -40,52 +30,13 @@ const Lateslip = () => {
     };
 
     fetchSlips();
-  }, [refreshKey]);
+  }, []);
 
-  const handleSubmit = async (
-    values: { reason: string },
-    { resetForm }: { resetForm: () => void }
-  ) => {
-    try {
-      const data = await requestLateSlip(values.reason);
-      if (data?.success) {
-        Toast.show({
-          type: "success",
-          text1: "Success",
-          text2: data.message || "Late slip requested successfully",
-        });
-        resetForm();
-        setRefreshKey((prev) => prev + 1);
-      } else {
-        Toast.show({
-          type: "error",
-          text1: "Error",
-          text2: data.message || "Late slip request failed",
-        });
-      }
-    } catch (err: any) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: err?.message || "Something went wrong",
-      });
-    }
-  };
-
-  // Helper to determine status color
   const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "approved":
-        return "green";
-      case "rejected":
-        return "red";
-      case "pending":
-      default:
-        return "black";
-    }
+    const s = status.toLowerCase();
+    return s === "approved" ? "green" : s === "rejected" ? "red" : "black";
   };
 
-  // Format date + time
   const formatDateTime = (isoString: string) => {
     const date = new Date(isoString);
     return date.toLocaleString("en-US", {
@@ -97,77 +48,35 @@ const Lateslip = () => {
     });
   };
 
+  const renderSlip = ({ item }: { item: any }) => (
+    <View style={styles.slipItem}>
+      <FontAwesome5 name="file-alt" size={32} color="#74C044" />
+      <View style={styles.slipDetails}>
+        <Text style={styles.reason}>Reason: {item.reason}</Text>
+        <Text style={styles.date}>{formatDateTime(item.created_at)}</Text>
+        <Text style={[styles.status, { color: getStatusColor(item.status) }]}>
+          Status: {item.status}
+        </Text>
+      </View>
+    </View>
+  );
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.screen}>
       <Header />
       <View style={styles.container}>
-        {/* <Text style={styles.heading}>Request a Lateslip</Text>
+        <Text style={styles.heading}>Your Late Slips</Text>
 
-        <Formik
-          initialValues={{ reason: "" }}
-          validationSchema={RequestSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
-            <>
-              <TextInput
-                placeholder="Reason for being late"
-                placeholderTextColor="rgba(0, 0, 0, 0.5)"
-                style={styles.input}
-                onChangeText={handleChange("reason")}
-                onBlur={handleBlur("reason")}
-                value={values.reason}
-                multiline
-              />
-              {touched.reason && errors.reason && (
-                <Text style={styles.error}>{errors.reason}</Text>
-              )}
-
-              <Button onPress={handleSubmit} title="Submit" />
-            </>
-          )}
-        </Formik> */}
-
-        <Text style={styles.statusHeading}>Your Late Slips</Text>
         {loading ? (
           <ActivityIndicator size="small" color="#74C044" />
         ) : slips.length === 0 ? (
-          <Text style={{ marginTop: 10 }}>No Records For Late Slips.</Text>
+          <Text style={styles.noData}>No Records For Late Slips.</Text>
         ) : (
           <FlatList
             data={slips}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingVertical: 10 }}
-            renderItem={({ item }) => (
-              <View style={styles.slipItem}>
-                <View>
-                  <FontAwesome5 name="file-alt" size={34} color="#74C044" />
-                </View>
-                <View>
-                  <View>
-                    <Text style={styles.reason}>Reason: {item.reason}</Text>
-                    <Text style={styles.date}>
-                      {formatDateTime(item.created_at)}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.status,
-                        { color: getStatusColor(item.status) },
-                      ]}
-                    >
-                      Status: {item.status}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            )}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderSlip}
+            contentContainerStyle={styles.listContent}
           />
         )}
       </View>
@@ -178,55 +87,52 @@ const Lateslip = () => {
 export default Lateslip;
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  container: {
+    flex: 1,
     paddingHorizontal: 20,
     paddingTop: 20,
   },
   heading: {
-    fontSize: 20,
-    marginBottom: 20,
-    fontWeight: "bold",
-  },
-  input: {
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 6,
-    padding: 10,
-    minHeight: 80,
-    textAlignVertical: "top",
-    marginBottom: 10,
-  },
-  error: {
-    color: "red",
-    marginBottom: 10,
-  },
-  statusHeading: {
     fontSize: 18,
     fontWeight: "bold",
-    marginTop: 30,
     marginBottom: 10,
   },
   slipItem: {
-    display: "flex",
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     backgroundColor: "#f2f2f2",
     padding: 12,
-    borderRadius: 6,
-    marginBottom: 10,
+    borderRadius: 8,
+    marginBottom: 12,
     gap: 12,
   },
-  status: {
-    fontSize: 11,
-    fontWeight: "bold",
+  slipDetails: {
+    flex: 1,
   },
   reason: {
     color: "#333",
+    fontSize: 14,
+    marginBottom: 4,
   },
   date: {
-    fontSize: 11,
+    fontSize: 12,
     color: "gray",
+    marginBottom: 2,
+  },
+  status: {
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  noData: {
+    marginTop: 10,
+    color: "#555",
+    textAlign: "center",
+  },
+  listContent: {
+    paddingVertical: 10,
   },
 });

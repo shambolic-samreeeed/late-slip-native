@@ -89,8 +89,14 @@ const TodaysClass = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.scrollContainer}
         >
-          {schedules.map((schedule) => (
-            <View key={schedule.id} style={styles.card}>
+          {schedules.map((schedule, index) => (
+            <View
+              key={schedule.id}
+              style={[
+                styles.card,
+                index === schedules.length - 1 && { marginRight: 0 },
+              ]}
+            >
               {/* Top section: Module name */}
               <View style={{ flexGrow: 1 }}>
                 <Text
@@ -134,7 +140,8 @@ export default TodaysClass;
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    paddingRight: 10,
+    paddingRight: 0,
+    paddingLeft: 0,
   },
   card: {
     width: 220,
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#FAFAFA",
     justifyContent: "space-between",
-    minHeight: 160, // Keeps height consistent
+    minHeight: 160,
   },
   moduleText: {
     fontFamily: "Montserrat",

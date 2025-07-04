@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   leftContainer: {
     gap: 15,
-    width: "80%",
+    width: "70%",
   },
   rightContainer: {
     flexDirection: "row",
