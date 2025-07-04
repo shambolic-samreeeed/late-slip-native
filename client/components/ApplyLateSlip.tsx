@@ -28,7 +28,7 @@ const LateSlipButton: React.FC<Props> = ({ startTime }) => {
       <View style={canApply ? styles.buttonWrapper : styles.disabledWrapper}>
         <Button
           title={canApply ? "Apply" : "Late Slip Not Available past 15 Minutes"}
-          onPress={() => replace("/(tabs)/lateslip")}
+          onPress={() => replace("/requestLateSliip")}
         />
       </View>
     </View>
