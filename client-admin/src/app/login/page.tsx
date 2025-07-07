@@ -1,74 +1,59 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
+import * as Yup from "yup";
+import React from "react";
 
-export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+const page = () => {
+  // const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post("/api/login", { email, password });
-
-      if (response.status === 200) {
-        // You may want to store the token in cookies here
-        router.push("/dashboard");
-      }
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Login failed");
-    }
+  const initialValues = {
+    email: "",
+    password: "",
   };
 
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email("Email Is Invalid.")
+      .required("Email is required"),
+    password: Yup.string().required("Password is required"),
+  });
+
+  const handleSubmit = async (
+    values: typeof initialValues,
+    { setSubmitting, setStatus }: any
+  ) => {
+    try {
+      const response = await axios.post("api/login", values);
+      if (response.status === 200) {
+        // router.push("/dashboard");
+      }
+    } catch (error: any) {
+      setStatus(error?.response?.data?.message || "Login Failed");
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
-    <div className="container d-flex align-items-center justify-content-center vh-100">
-      <div
-        className="card shadow p-4"
-        style={{ maxWidth: "400px", width: "100%" }}
-      >
-        <h3 className="mb-3 text-center">Admin Login</h3>
+    <div>
+      <div>
+        <h3>Herald Sync Admin Login</h3>
 
-        {error && <div className="alert alert-danger">{error}</div>}
-
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email address
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary w-100">
-            Login
-          </button>
-        </form>
+        <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}>
+          {({isSubmitting, status})=>(
+            <Form>
+              
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
-}
+};
+
+export default page;
