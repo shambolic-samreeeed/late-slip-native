@@ -1,12 +1,25 @@
-import Link from "next/link";
-import React from "react";
+"use client";
 
-const page = () => {
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+
+const Page = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.replace("/login");
+    } else {
+      router.replace("/dashboard");
+    }
+  }, [router]);
+
   return (
-    <div>
-      <Link href="/login">Login</Link>
+    <div className="flex items-center justify-center min-h-screen">
+      Loading...
     </div>
   );
 };
 
-export default page;
+export default Page;
