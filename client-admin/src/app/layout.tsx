@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "react-toastify/dist/ReactToastify.css"; // ⬅️ Import toast styles
+import "react-toastify/dist/ReactToastify.css"; 
 import "./globals.css";
 
-import { ToastContainer } from "react-toastify"; // ⬅️ Import ToastContainer
+import { ToastContainer } from "react-toastify"; 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +34,7 @@ export default function RootLayout({
         {/* ToastContainer should be rendered once here */}
         <ToastContainer position="top-right" autoClose={3000} />
 
-        <div className="container-fluid px-3">{children}</div>
+        <div className="container-fluid px-0">{children}</div>
       </body>
     </html>
   );
