@@ -5,12 +5,20 @@ interface LoginPayload {
   email: string;
   password: string;
 }
+
 export const login = async (payload: LoginPayload) => {
   try {
     const response = await axios.post(`${BASE_URL}/admin/login`, payload);
-    return response.data;
+    const data = response.data;
+
+    if (data?.data?.role !== "admin") {
+      throw new Error("Unauthorized access. Only admins can log in.");
+    }
+
+    return data;
   } catch (error: any) {
-    const message = error?.response?.data?.message || 'Something went wrong during login';
-    throw new Error(message)
+    const message =
+      error?.response?.data?.message || error.message || "Login failed";
+    throw new Error(message);
   }
 };

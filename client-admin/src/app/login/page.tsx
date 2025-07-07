@@ -20,26 +20,25 @@ export default function LoginPage() {
   ) => {
     try {
       const data = await login(values);
+
+      // Save token
       localStorage.setItem("token", data.token);
 
-      toast.success(" Logged in successfully!", {
+      toast.success("✅ Logged in successfully!", {
         position: "top-right",
         autoClose: 2500,
       });
 
       router.push("/dashboard");
     } catch (err: any) {
-      const message =
-        err?.response?.data?.message ||
-        err?.message ||
-        "Something went wrong. Please try again.";
+      const message = err?.message || "Something went wrong. Please try again.";
 
-      toast.error(`Login failed: ${message}`, {
+      toast.error(message, {
         position: "top-right",
         autoClose: 3000,
       });
 
-      setStatus("Login failed. Check your credentials.");
+      setStatus("Login failed.");
     } finally {
       setSubmitting(false);
     }
@@ -64,14 +63,9 @@ export default function LoginPage() {
             isSubmitting,
             errors,
             touched,
-            status,
           }) => (
             <form onSubmit={handleSubmit} className="space-y-4">
-              {status && (
-                <div className="bg-red-100 text-red-700 p-2 rounded text-sm">
-                  {status}
-                </div>
-              )}
+              {/* Removed status error box */}
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">
