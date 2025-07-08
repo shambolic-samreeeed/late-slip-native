@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/api";
+const API_URL = BASE_URL;
 
 export interface LateSlip {
   id: string;
@@ -11,37 +12,10 @@ export interface LateSlip {
   request_id: string;
 }
 
-interface LateSlipsResponse {
-  success: boolean;
-  lateSlips: LateSlip[];
-}
-
-export const getLateSlips = async (): Promise<LateSlipsResponse> => {
-  try {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      throw new Error("No token found. Please log in again.");
-    }
-
-    const response = await axios.get(`${BASE_URL}/admin/lateslips/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = response.data;
-
-    if (!data.success) {
-      throw new Error("Failed to fetch late slips");
-    }
-
-    return data;
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message ||
-      error.message ||
-      "Failed to fetch late slips";
-    throw new Error(message);
-  }
+export const getLateSlips = async () => {
+  const token = await localStorage.getItem("token");
+  const response = await axios.get(`${API_URL}/admin/lateslips`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
 };
