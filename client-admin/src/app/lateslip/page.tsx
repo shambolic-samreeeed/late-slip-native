@@ -3,16 +3,30 @@
 import React, { useEffect, useState } from "react";
 import { getLateSlips, LateSlip } from "../services/lateslipService";
 import NavBar from "../components/NavBar";
+import Link from "next/link";
+
+interface LateSlipWithFormattedDate extends LateSlip {
+  formattedCreatedAt: string;
+}
 
 const Page = () => {
-  const [lateSlips, setLateSlips] = useState<LateSlip[]>([]);
+  const [lateSlips, setLateSlips] = useState<LateSlipWithFormattedDate[]>([]);
 
   useEffect(() => {
     const fetchLateSlips = async () => {
       try {
         const response = await getLateSlips();
-        setLateSlips(response.lateSlips);
-        console.log(response);
+        if (!response || !Array.isArray(response.lateSlips)) {
+          setLateSlips([]);
+        } else {
+          // ✅ Format date on client side only
+          const formatted = response.lateSlips.map((slip: any) => ({
+            ...slip,
+            formattedCreatedAt: new Date(slip.created_at).toLocaleString(),
+          }));
+          setLateSlips(formatted);
+          console.log(formatted);
+        }
       } catch (err: any) {
         console.log(err);
       }
@@ -40,13 +54,13 @@ const Page = () => {
               <td className="border px-4 py-2">{slip.reason}</td>
               <td className="border px-4 py-2">{slip.student_id}</td>
               <td className="border px-4 py-2">{slip.status}</td>
+              <td className="border px-4 py-2">{slip.formattedCreatedAt}</td>
               <td className="border px-4 py-2">
-                {new Date(slip.created_at).toLocaleString()}
-              </td>
-              <td className="border px-4 py-2">
-                <button className="bg-blue-500 py-1 px-4 text-white">
-                  View
-                </button>
+                <Link href={`/lateslip/${slip.id}`}>
+                  <button className="bg-blue-500 py-1 px-4 text-white">
+                    View
+                  </button>
+                </Link>
               </td>
             </tr>
           ))}
