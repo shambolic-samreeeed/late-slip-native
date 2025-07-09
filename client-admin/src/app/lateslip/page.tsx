@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getLateSlips, LateSlip } from "../services/lateslipService";
+import {
+  approveLateSlip,
+  getLateSlips,
+  LateSlip,
+} from "../services/lateslipService";
+
 import NavBar from "../components/NavBar";
 import Link from "next/link";
 
@@ -19,20 +24,35 @@ const Page = () => {
         if (!response || !Array.isArray(response.lateSlips)) {
           setLateSlips([]);
         } else {
-          // ✅ Format date on client side only
           const formatted = response.lateSlips.map((slip: any) => ({
             ...slip,
             formattedCreatedAt: new Date(slip.created_at).toLocaleString(),
           }));
           setLateSlips(formatted);
-          console.log(formatted);
         }
-      } catch (err: any) {
-        console.log(err);
+      } catch (err) {
+        console.error(err);
       }
     };
     fetchLateSlips();
   }, []);
+
+  const handleApprove = async (slip: LateSlipWithFormattedDate) => {
+    try {
+      const result = await approveLateSlip(slip.id, slip.student_id);
+      if (result.success) {
+        setLateSlips((prev) =>
+          prev.map((s) => (s.id === slip.id ? { ...s, status: "approved" } : s))
+        );
+        alert("Late slip approved successfully!");
+      } else {
+        alert("Failed to approve late slip.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error approving late slip.");
+    }
+  };
 
   return (
     <div>
@@ -55,12 +75,16 @@ const Page = () => {
               <td className="border px-4 py-2">{slip.student_id}</td>
               <td className="border px-4 py-2">{slip.status}</td>
               <td className="border px-4 py-2">{slip.formattedCreatedAt}</td>
-              <td className="border px-4 py-2">
-                <Link href={`/lateslip/${slip.id}`}>
-                  <button className="bg-blue-500 py-1 px-4 text-white">
-                    View
+              <td className="border px-4 py-2 flex gap-2">
+                <Link href={`/lateslip/${slip.id}`}></Link>
+                {slip.status !== "approved" && (
+                  <button
+                    className="bg-green-600 py-1 px-4 text-white"
+                    onClick={() => handleApprove(slip)}
+                  >
+                    Accept
                   </button>
-                </Link>
+                )}
               </td>
             </tr>
           ))}
