@@ -1,7 +1,8 @@
 import React from "react";
+import { requireAuth } from "../utils/checkLogin";
 
 const page = () => {
-  return <div>Students</div>;
+  const token = requireAuth();
 };
 
 export default page;

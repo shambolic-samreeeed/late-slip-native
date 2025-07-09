@@ -1,8 +1,11 @@
-"use client";
-import React from "react";
+// app/lateSlips/page.tsx
 
-const page = () => {
-  return <div>Late Slips</div>;
-};
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { requireAuth } from "../utils/checkLogin";
 
-export default page;
+export default async function LateSlipsPage() {
+  const token = requireAuth();
+
+  return <main className="p-8">LateSlips</main>;
+}
